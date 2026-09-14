@@ -2,8 +2,8 @@
 
 ## Release state
 
-RivetPay v0.1.0 is release-ready and is the intended initial public release;
-it has not yet been publicly published.
+RivetPay v0.1.0 is the methodology-frozen initial public release, released as
+part of the initial public Rivet family.
 
 ## What RivetPay does
 
@@ -45,5 +45,5 @@ Version 0.1.0 passed the package's deterministic validation suite, including 112
 
 ## Upgrade notes
 
-This is the intended initial public release. There are no prior public-version
-migration requirements, and no GitHub release or tag is implied by this note.
+This is the initial public release. There are no prior public-version migration
+requirements.

@@ -1,6 +1,6 @@
 # RivetTriage
 
-**Version:** `0.1.1` · **Status:** Methodology frozen; release-ready; intended initial public release; not yet publicly published.
+**Version:** `0.1.1` · **Status:** Methodology frozen; initial public release; released as part of the initial public Rivet family.
 
 RivetTriage is the post-discovery reconciliation stage of the Rivet review flow:
 

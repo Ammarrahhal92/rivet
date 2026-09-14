@@ -25,8 +25,8 @@ Release notes should be derived from each package's existing current release-not
 - [ ] Create the package-specific prefixed tag.
 - [ ] Create the package-specific GitHub Release.
 
-## First public publication
+## Initial public publication
 
-Several package documents currently describe the packages as release-ready and not yet publicly published. Before or atomically with the first public publication, perform a bounded publication-state documentation transition if necessary so the live repository does not retain a false current-state statement.
+The initial public transition for the current four-skill family is complete. Current package documents use durable release-state wording: each version is methodology-frozen and released as part of the initial public Rivet family.
 
-That future transition is documentation-only and is not performed by this local publication build.
+Future package releases should update only the relevant current-state documentation as part of their own release process.

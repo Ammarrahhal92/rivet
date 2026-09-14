@@ -87,7 +87,7 @@ The 210 methodology evals remain in `evals/evals.json`. Behavioral regression ca
 
 ## Release and freeze criteria
 
-Version 0.1.0 is release-ready and is the intended initial public release; it has not yet been published by this task. A passing validator, valid eval JSON, or one benchmark does not establish behavioral stability. Before publication, run critical regression fixtures in fresh contexts with repeated independent runs, require positive recall and negative precision, require structured validation and deterministic reports, and review policy, lineage, refund-restoration, and wrong-authority controls.
+Version 0.1.0 is the methodology-frozen initial public release of RivetPay. A passing validator, valid eval JSON, or one benchmark does not establish behavioral stability. Release validation includes critical regression fixtures in fresh contexts with repeated independent runs, positive recall and negative precision, structured validation and deterministic reports, and review of policy, lineage, refund-restoration, and wrong-authority controls.
 
 ## Known limitations
 

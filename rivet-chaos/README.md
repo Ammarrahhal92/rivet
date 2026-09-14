@@ -1,6 +1,6 @@
 # RivetChaos
 
-**Version:** `0.2.4` · **Status:** Methodology frozen; release-ready; intended initial public release; not yet publicly published
+**Version:** `0.2.4` · **Status:** Methodology frozen; initial public release; released as part of the initial public Rivet family
 
 RivetChaos is an adversarial behavioral review skill for established software repositories with an identifiable product/system contract. It examines how realistic confused, curious, chaotic, and limit-abusing behavior can challenge important product invariants. RivetChaos is discovery-only: it records evidence and remediation direction, but does not fix findings.
 
@@ -116,4 +116,4 @@ rivet-chaos/
 
 ## Development status
 
-RivetChaos `0.2.4` is methodology-frozen and release-ready as the intended initial public release; it has not yet been publicly published. This refinement adds a mandatory adversarial path closure gate that preserves actor/object identity, cardinality, state transitions, and consequence support before a finding is confirmed. External usage and feedback are welcome. The API, report format, and methodology are frozen for version `0.2.4`.
+RivetChaos `0.2.4` is methodology-frozen and is the initial public release, released as part of the initial public Rivet family. This refinement adds a mandatory adversarial path closure gate that preserves actor/object identity, cardinality, state transitions, and consequence support before a finding is confirmed. External usage and feedback are welcome. The API, report format, and methodology are frozen for version `0.2.4`.

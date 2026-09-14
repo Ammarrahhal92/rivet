@@ -5,8 +5,8 @@
 - Added evidence lineage tracking and independent-vs-derivative corroboration discipline.
 - Added anti-source-laundering evaluation coverage.
 
-This methodology is frozen and release-ready as the intended initial public
-release. It has not yet been publicly published. Prior repository benchmark
+This methodology is frozen and is the initial public release, released as part
+of the initial public Rivet family. Prior repository benchmark
 validation was internal; benchmark artifacts are not packaged as independently
 inspectable public evidence.
 

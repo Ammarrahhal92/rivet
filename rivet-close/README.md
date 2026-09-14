@@ -1,6 +1,6 @@
 # RivetClose
 
-**Version:** `0.1.1` · **Status:** Methodology frozen; release-ready; intended initial public release; not yet publicly published.
+**Version:** `0.1.1` · **Status:** Methodology frozen; initial public release; released as part of the initial public Rivet family.
 
 RivetClose performs evidence-based remediation and closure of canonical
 `READY` findings produced by RivetTriage. It repairs the bounded defect,

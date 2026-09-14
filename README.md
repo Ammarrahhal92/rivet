@@ -19,7 +19,7 @@ RivetPay ───┘
 | [RivetTriage](rivet-triage/README.md) | Post-discovery normalization, canonical finding identity, deduplication, provenance, current-state reconciliation, severity reconciliation, and READY handoff. |
 | [RivetClose](rivet-close/README.md) | Bounded remediation, regression verification, and evidence-based closure of canonical READY findings. |
 
-The packages are methodology-frozen and release-ready. They are intended initial public releases and have not yet been publicly published.
+The packages are methodology-frozen and released as the initial public Rivet family.
 
 ## Independent use
 

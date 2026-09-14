@@ -2,8 +2,8 @@
 
 ## Release state
 
-The RivetClose methodology is frozen and release-ready as the intended initial
-public release. It has not yet been publicly published.
+The RivetClose methodology is frozen and is the initial public release,
+released as part of the initial public Rivet family.
 
 ## What RivetClose does
 

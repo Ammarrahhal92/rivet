@@ -6,7 +6,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [0.1.0] - 2026-09-13
 
-Release-ready package for the intended initial public release; not yet publicly published.
+Initial public release of the methodology-frozen RivetPay package, released as part of the initial public Rivet family.
 
 ### Added
 

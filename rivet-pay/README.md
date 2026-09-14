@@ -1,6 +1,6 @@
 # RivetPay
 
-**Version:** `0.1.0` · **Status:** Methodology frozen; release-ready; intended initial public release; not yet publicly published.
+**Version:** `0.1.0` · **Status:** Methodology frozen; initial public release; released as part of the initial public Rivet family.
 
 ## Adversarial Payment & Entitlement Reviewer for Coding Agents
 
