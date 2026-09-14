@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Rivet — Agent skills for adversarial review</title>
+  <desc id="desc">Rivet connects adversarial discovery, payment review, canonical triage, and verified closure.</desc>
+  <rect width="1280" height="640" fill="#111418"/>
+  <path d="M0 518h1280" stroke="#303843" stroke-width="2"/>
+  <path d="M72 102h100" stroke="#7de2d1" stroke-width="6"/>
+  <text x="72" y="184" fill="#f4f6f8" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="700">Rivet</text>
+  <text x="76" y="244" fill="#a9b2bd" font-family="Arial, Helvetica, sans-serif" font-size="30">Agent skills for adversarial review</text>
+  <text x="76" y="286" fill="#a9b2bd" font-family="Arial, Helvetica, sans-serif" font-size="30">→ canonical triage → verified closure</text>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700">
+    <rect x="76" y="382" width="242" height="76" rx="6" fill="#20262e" stroke="#7de2d1" stroke-width="2"/>
+    <rect x="344" y="382" width="242" height="76" rx="6" fill="#20262e" stroke="#7de2d1" stroke-width="2"/>
+    <rect x="612" y="382" width="242" height="76" rx="6" fill="#20262e" stroke="#7de2d1" stroke-width="2"/>
+    <rect x="880" y="382" width="242" height="76" rx="6" fill="#20262e" stroke="#7de2d1" stroke-width="2"/>
+    <text x="197" y="430" text-anchor="middle" fill="#f4f6f8">Chaos</text>
+    <text x="465" y="430" text-anchor="middle" fill="#f4f6f8">Pay</text>
+    <text x="733" y="430" text-anchor="middle" fill="#f4f6f8">Triage</text>
+    <text x="1001" y="430" text-anchor="middle" fill="#f4f6f8">Close</text>
+  </g>
+  <text x="76" y="572" fill="#7de2d1" font-family="Arial, Helvetica, sans-serif" font-size="22">OPEN-SOURCE · METHODOLOGY-FROZEN · FOUR INDEPENDENT SKILLS</text>
+</svg>

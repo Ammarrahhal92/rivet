@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Rivet mark</title>
+  <desc id="desc">A geometric rivet mark made from two connected brackets.</desc>
+  <rect width="64" height="64" rx="14" fill="#111418"/>
+  <path d="M18 16h18c7 0 11 4 11 10 0 5-3 8-7 9l9 13H39l-8-12h-5v12H18V16Zm8 7v7h9c3 0 4-1 4-3.5S38 23 35 23h-9Z" fill="#7de2d1"/>
+</svg>

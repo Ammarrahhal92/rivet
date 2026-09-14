@@ -1,14 +1,35 @@
 # Rivet
 
-Rivet is a family of independently installable agent skills for adversarial review, specialized commercial-authority review, canonical triage, and evidence-based remediation and closure.
+Open-source agent skills for adversarial code review, payment and entitlement security, canonical triage, and evidence-based remediation.
 
-The current publication scope contains exactly four skills:
+[Website](https://ammarrahhal92.github.io/rivet/) · [GitHub](https://github.com/Ammarrahhal92/rivet) · [Releases](https://github.com/Ammarrahhal92/rivet/releases) · [MIT License](LICENSE)
+
+Rivet is a published, methodology-frozen family of four independently installable Codex skills. Use the relevant skill for the review surface; the four do not always need to run together.
 
 ```text
 RivetChaos ─┐
             ├─> RivetTriage ─> RivetClose
 RivetPay ───┘
 ```
+
+## Quick start
+
+```bash
+git clone https://github.com/Ammarrahhal92/rivet.git
+```
+
+Copy the package directory you need into `~/.codex/skills/`. For example, copy `rivet-chaos/` and invoke it with:
+
+```text
+$rivet-chaos Audit this repository.
+```
+
+## Why Rivet?
+
+- Discovery is separated from family-level canonical triage and bounded closure.
+- Current evidence and explicit uncertainty remain visible instead of being silently converted to certainty.
+- Commercial authority gets a specialized review path when it is relevant.
+- Each skill remains independently copyable and installable.
 
 ## Family roles
 
@@ -19,27 +40,16 @@ RivetPay ───┘
 | [RivetTriage](rivet-triage/README.md) | Post-discovery normalization, canonical finding identity, deduplication, provenance, current-state reconciliation, severity reconciliation, and READY handoff. |
 | [RivetClose](rivet-close/README.md) | Bounded remediation, regression verification, and evidence-based closure of canonical READY findings. |
 
-The packages are methodology-frozen and released as the initial public Rivet family.
+Chaos can be used independently. Pay is useful only when commercial authority exists and is not required for non-commercial repositories. Triage accepts Chaos, Pay, or other explicit review material. Close consumes canonical READY findings from Triage. Chaos does not have to precede Pay, and Pay does not replace Triage.
 
-## Independent use
-
-The four skills do not always need to run together.
-
-- Use RivetChaos independently for broad adversarial behavioral discovery.
-- Use RivetPay when payment, subscription, license, entitlement, quota, credits, trials, commercial access, or grant authority exists. Pay is not required for non-commercial repositories.
-- Use RivetTriage when findings from Chaos, Pay, or another explicit review source need to become one current canonical register.
-- Use RivetClose when canonical READY findings are ready for bounded remediation and verification.
-
-Chaos does not have to precede Pay. Pay does not replace Triage. Close consumes canonical READY findings from Triage.
-
-## Current release matrix
+## Current published releases
 
 | Skill | Version | Invocation | State |
 | --- | --- | --- | --- |
-| RivetChaos | 0.2.4 | `$rivet-chaos Audit this repository.` | Methodology-frozen; release-ready |
-| RivetPay | 0.1.0 | `$rivet-pay Review this repository.` | Methodology-frozen; release-ready |
-| RivetTriage | 0.1.1 | `$rivet-triage Triage this repository.` | Methodology-frozen; release-ready |
-| RivetClose | 0.1.1 | `$rivet-close Close the ready findings in this repository.` | Methodology-frozen; release-ready |
+| RivetChaos | 0.2.4 | `$rivet-chaos Audit this repository.` | Published; methodology-frozen |
+| RivetPay | 0.1.0 | `$rivet-pay Review this repository.` | Published; methodology-frozen |
+| RivetTriage | 0.1.1 | `$rivet-triage Triage this repository.` | Published; methodology-frozen |
+| RivetClose | 0.1.1 | `$rivet-close Close the ready findings in this repository.` | Published; methodology-frozen |
 
 ## When to use which skill
 
@@ -50,7 +60,7 @@ Chaos does not have to precede Pay. Pay does not replace Triage. Close consumes 
 
 ## Installation
 
-Each package is independently installable as a Codex skill. Copy the package directory you need into the generic Codex skills destination:
+Each package is independently installable as a Codex skill. Copy the package directory you need into:
 
 ```text
 ~/.codex/skills/
@@ -62,8 +72,6 @@ For example:
 rivet-chaos/  →  ~/.codex/skills/rivet-chaos/
 rivet-pay/    →  ~/.codex/skills/rivet-pay/
 ```
-
-Install only the packages relevant to the review. Each package remains independently copyable and installable.
 
 ## Output locations
 
@@ -81,8 +89,8 @@ The packages include methodology and evaluation evidence appropriate to each ski
 - RivetTriage: 56 declarative eval cases
 - RivetClose: 75 declarative eval cases
 
-These counts are package validation evidence, not proof that a reviewed application is secure or defect-free. They do not represent independently packaged public application-benchmark artifacts.
+These counts are package validation artifacts, not a guarantee that reviewed applications are secure or defect-free. They do not represent independently packaged public application-benchmark artifacts.
 
-## License
+## License and contribution
 
-Rivet is distributed under the [MIT License](LICENSE). Each package also carries its own MIT [LICENSE](rivet-chaos/LICENSE) so that packages remain independently distributable.
+Rivet is distributed under the [MIT License](LICENSE). Each package also carries its own MIT [LICENSE](rivet-chaos/LICENSE) so packages remain independently distributable. See [CONTRIBUTING.md](CONTRIBUTING.md) and [RELEASING.md](RELEASING.md) for project guidance.
