@@ -1,0 +1,528 @@
+{
+  "skill": "rivet-triage",
+  "version": "0.1.1",
+  "evals": [
+    {
+      "id": "RT-E001",
+      "name": "Exact duplicate across specialists",
+      "input": "SEC reports an unauthenticated legacy endpoint. BOUND reports the same route is publicly mounted without the required guard. Same mechanism and unauthorized read.",
+      "expected": [
+        "EXACT DUPLICATE",
+        "one RT canonical finding",
+        "preserve both source mappings"
+      ]
+    },
+    {
+      "id": "RT-E002",
+      "name": "Same subsystem is not duplicate",
+      "input": "REL reports export dispatch loss before queue admission. PERF reports 100k-row export memory materialization.",
+      "expected": [
+        "RELATED DISTINCT",
+        "two canonical findings"
+      ]
+    },
+    {
+      "id": "RT-E003",
+      "name": "Shared remediation is insufficient",
+      "input": "Two findings can both be improved by adding a transaction, but they involve different operations, invariants, and failure outcomes.",
+      "expected": [
+        "not EXACT DUPLICATE",
+        "relationship based on mechanism not remediation"
+      ]
+    },
+    {
+      "id": "RT-E004",
+      "name": "Compound finding split",
+      "input": "One source finding says a public endpoint lacks authentication and also returns raw internal exception details.",
+      "expected": [
+        "split when independently actionable",
+        "one source may map to multiple RT IDs"
+      ]
+    },
+    {
+      "id": "RT-E005",
+      "name": "Do not split consequences of one race",
+      "input": "A uniqueness check-then-insert race throws a constraint violation and aborts the enclosing business transaction.",
+      "expected": [
+        "keep as one defect when same root mechanism",
+        "no artificial split"
+      ]
+    },
+    {
+      "id": "RT-E006",
+      "name": "Historical closed is not fixed proof",
+      "input": "A closure report says CH-001 CLOSED but no current verification is supplied.",
+      "expected": [
+        "do not classify FIXED from closure prose alone",
+        "bounded current verification or UNVERIFIED CURRENT STATE"
+      ]
+    },
+    {
+      "id": "RT-E007",
+      "name": "Possible regression requires uncertainty",
+      "input": "Defect existed, was later marked fixed, and appears current again, but no evidence proves it was ever actually absent.",
+      "expected": [
+        "POSSIBLE REGRESSION",
+        "not REOPENED DEFECT"
+      ]
+    },
+    {
+      "id": "RT-E008",
+      "name": "Reopened defect strong evidence",
+      "input": "Historical defect existed; later evidence proves mechanism absent; current revision proves the same mechanism present again.",
+      "expected": [
+        "REOPENED DEFECT"
+      ]
+    },
+    {
+      "id": "RT-E009",
+      "name": "Current status separate from provenance",
+      "input": "A defect reported by an older independent audit still exists now.",
+      "expected": [
+        "CURRENT",
+        "KNOWN FROM OTHER REVIEW"
+      ]
+    },
+    {
+      "id": "RT-E010",
+      "name": "Old same-family persistence",
+      "input": "Current RivetSpec finding matches an older RivetSpec finding and was never verified fixed.",
+      "expected": [
+        "CURRENT",
+        "OLD SAME-FAMILY FINDING",
+        "not regression"
+      ]
+    },
+    {
+      "id": "RT-E011",
+      "name": "Historical only fixed",
+      "input": "Old finding is verified absent in current code after remediation.",
+      "expected": [
+        "FIXED",
+        "HISTORICAL ONLY"
+      ]
+    },
+    {
+      "id": "RT-E012",
+      "name": "Stale removed path",
+      "input": "Historical finding points to a feature/route removed from the current product contract; no equivalent current path exists.",
+      "expected": [
+        "STALE",
+        "HISTORICAL ONLY"
+      ]
+    },
+    {
+      "id": "RT-E013",
+      "name": "Finding versus resilient conflict",
+      "input": "STATE reports a producer race; REL says a consumer-side queue lock prevents it.",
+      "expected": [
+        "do not vote",
+        "control does not invalidate different lifecycle phase"
+      ]
+    },
+    {
+      "id": "RT-E014",
+      "name": "Control really invalidates finding",
+      "input": "A source claims duplicate creation, but current path performs an atomic upsert under a matching unique key and handles conflict on the same operation.",
+      "expected": [
+        "CONTROL INVALIDATES FINDING",
+        "source still accounted for"
+      ]
+    },
+    {
+      "id": "RT-E015",
+      "name": "Title similarity not enough",
+      "input": "Two findings are both titled Notification race but one concerns preference first-write uniqueness and the other notification dedup rollback.",
+      "expected": [
+        "not EXACT DUPLICATE",
+        "identity fingerprint comparison"
+      ]
+    },
+    {
+      "id": "RT-E016",
+      "name": "Different titles same defect",
+      "input": "SEC calls it legacy route unauthorized read; Chaos calls it curious user can open old Brand API. Same route, missing auth, same data.",
+      "expected": [
+        "EXACT DUPLICATE"
+      ]
+    },
+    {
+      "id": "RT-E017",
+      "name": "Canonical claim narrowing",
+      "input": "One source claims all private metadata leaks; current evidence proves only email and account ID are exposed.",
+      "expected": [
+        "canonical claim limited to proven fields",
+        "record unsupported expansion"
+      ]
+    },
+    {
+      "id": "RT-E018",
+      "name": "Severity vote prohibited",
+      "input": "Sources rate the same defect P1, P2, and P3; current blast radius is bounded and recoverable.",
+      "expected": [
+        "reconcile from current impact",
+        "do not average or majority vote"
+      ]
+    },
+    {
+      "id": "RT-E019",
+      "name": "Duplicate count does not amplify severity",
+      "input": "Five reviewers independently find the same bounded P3 defect.",
+      "expected": [
+        "one canonical finding",
+        "severity not raised because of reviewer count"
+      ]
+    },
+    {
+      "id": "RT-E020",
+      "name": "Known defect does not lower severity",
+      "input": "A known persistent defect has material current P2 impact.",
+      "expected": [
+        "retain P2 if justified",
+        "provenance independent from severity"
+      ]
+    },
+    {
+      "id": "RT-E021",
+      "name": "Question scoped verification",
+      "input": "To decide if two findings are duplicates, only the current queue handoff and DB write path need inspection.",
+      "expected": [
+        "inspect bounded path",
+        "do not launch broad reliability review"
+      ]
+    },
+    {
+      "id": "RT-E022",
+      "name": "Incidental new bug",
+      "input": "While checking duplicate identity, triage notices an unrelated missing authorization check not present in any source finding.",
+      "expected": [
+        "do not create RT finding",
+        "optional OUT-OF-SCOPE DISCOVERY SIGNAL"
+      ]
+    },
+    {
+      "id": "RT-E023",
+      "name": "Every source accounted",
+      "input": "10 source findings produce 6 canonical findings, 1 split, 2 fixed historical dispositions, and 1 unresolved candidate.",
+      "expected": [
+        "all source findings represented",
+        "no silent omissions"
+      ]
+    },
+    {
+      "id": "RT-E024",
+      "name": "Unresolved duplicate relationship",
+      "input": "Two historical reports describe similar effects but neither identifies code path or root mechanism and current behavior cannot be resolved narrowly.",
+      "expected": [
+        "INSUFFICIENT EVIDENCE TO RELATE",
+        "unresolved rather than guessed merge"
+      ]
+    },
+    {
+      "id": "RT-E025",
+      "name": "Single current finding simple triage",
+      "input": "One current source report contains one well-evidenced finding, no history and no overlaps.",
+      "expected": [
+        "one RT canonical finding",
+        "no fabricated complexity"
+      ]
+    },
+    {
+      "id": "RT-E026",
+      "name": "Artifact role classification",
+      "input": "A current RivetChaos report and an older audit are both present under docs/reviews.",
+      "expected": [
+        "classify artifacts by role",
+        "do not treat every review file as current input"
+      ]
+    },
+    {
+      "id": "RT-E027",
+      "name": "No majority vote",
+      "input": "Four reports say FINDING and one says ALREADY RESILIENT with a concrete control.",
+      "expected": [
+        "verify control",
+        "do not decide 4-to-1"
+      ]
+    },
+    {
+      "id": "RT-E028",
+      "name": "Partial overlap producer vs rollback",
+      "input": "One finding is a uniqueness race; another describes broader outer-transaction rollback from the same error plus separate recovery consequences.",
+      "expected": [
+        "consider PARTIAL OVERLAP unless identity fully matches",
+        "do not merge automatically"
+      ]
+    },
+    {
+      "id": "RT-E029",
+      "name": "Same file different defects",
+      "input": "Two reports reference the same table/controller, but one requires conflict-safe insert and the other requires cascade deletion.",
+      "expected": [
+        "RELATED DISTINCT",
+        "two canonical defects"
+      ]
+    },
+    {
+      "id": "RT-E030",
+      "name": "Fixed status current verification",
+      "input": "Old finding says a route lacked auth. Current route has mandatory auth and no alternate mount exists.",
+      "expected": [
+        "FIXED if bounded verification supports absence",
+        "HISTORICAL ONLY"
+      ]
+    },
+    {
+      "id": "RT-E031",
+      "name": "Self-referential test not enough",
+      "input": "Generated OpenAPI checker compares generated output against the same generator logic; actual runtime route differs.",
+      "expected": [
+        "test does not invalidate finding",
+        "compare actual runtime boundary"
+      ]
+    },
+    {
+      "id": "RT-E032",
+      "name": "Deployment topology uncertainty",
+      "input": "A race requires multiple scheduler instances but deployment evidence does not establish multiplicity.",
+      "expected": [
+        "UNVERIFIED CURRENT STATE or unresolved",
+        "do not infer topology"
+      ]
+    },
+    {
+      "id": "RT-E033",
+      "name": "Ordinary request concurrency",
+      "input": "A race requires two ordinary supported requests against the same key; implementation lacks serialization/conflict handling.",
+      "expected": [
+        "can verify without production collision logs",
+        "do not require hypothetical deployment multiplicity"
+      ]
+    },
+    {
+      "id": "RT-E034",
+      "name": "Ready handoff",
+      "input": "Canonical current defect has supported invariant, mechanism, reachability, impact, current evidence, and resolved identity.",
+      "expected": [
+        "READY"
+      ]
+    },
+    {
+      "id": "RT-E035",
+      "name": "Blocked contract ambiguous",
+      "input": "Mechanism is clear but whether behavior violates supported product intent cannot be distinguished.",
+      "expected": [
+        "BLOCKED — CONTRACT AMBIGUOUS"
+      ]
+    },
+    {
+      "id": "RT-E036",
+      "name": "Blocked current state",
+      "input": "Historical finding identity is clear but current runtime state cannot be checked.",
+      "expected": [
+        "BLOCKED — CURRENT STATE UNVERIFIED"
+      ]
+    },
+    {
+      "id": "RT-E037",
+      "name": "Blocked insufficient evidence",
+      "input": "Source finding omits invariant, code path, and reproducible behavior; bounded verification cannot locate it.",
+      "expected": [
+        "BLOCKED — INSUFFICIENT EVIDENCE",
+        "unresolved-candidates.md"
+      ]
+    },
+    {
+      "id": "RT-E038",
+      "name": "No remediation",
+      "input": "While verifying a current defect, the fix is obvious and one-line.",
+      "expected": [
+        "do not modify product",
+        "record remediation class only"
+      ]
+    },
+    {
+      "id": "RT-E039",
+      "name": "Superseded compound source",
+      "input": "One old finding is decomposed into two better current canonical defects.",
+      "expected": [
+        "source disposition SUPERSEDED",
+        "maps to two RT IDs"
+      ]
+    },
+    {
+      "id": "RT-E040",
+      "name": "Novelty scope discipline",
+      "input": "No prior reports are available but repository history before the current review is unknown.",
+      "expected": [
+        "avoid global novelty claim",
+        "scope GENUINELY NEW to reviewed history or use INSUFFICIENT EVIDENCE"
+      ]
+    },
+    {
+      "id": "RT-E041",
+      "name": "Framework recovery invalidates upstream finding",
+      "input": "A source reports missing create/dispatch atomicity, but current framework and queue semantics guarantee recovery of the claimed failure without the alleged bad outcome.",
+      "expected": [
+        "apply source-finding validity gate",
+        "CONTROL INVALIDATES FINDING or rejected/non-finding",
+        "do not admit CURRENT"
+      ]
+    },
+    {
+      "id": "RT-E042",
+      "name": "Missing preferred control is not a defect",
+      "input": "A source points out that a preferred cleanup control is absent, but no current supported invariant is violated and no concrete undesirable behavior is established.",
+      "expected": [
+        "reject or keep non-current",
+        "absence alone does not prove a finding",
+        "preserve source accounting"
+      ]
+    },
+    {
+      "id": "RT-E043",
+      "name": "Historical false-positive validator requires current check",
+      "input": "An old validator calls a source finding a false positive, but the current code path has changed and current implementation evidence is available.",
+      "expected": [
+        "use historical validator as context only",
+        "check current implementation and behavior",
+        "do not accept or reject from historical prose alone"
+      ]
+    },
+    {
+      "id": "RT-E044",
+      "name": "Rejected source remains fully accounted",
+      "input": "A current source finding fails the invariant and concrete-behavior validity checks during bounded verification.",
+      "expected": [
+        "rejected/non-finding with explicit basis",
+        "source appears in provenance mapping",
+        "no CURRENT canonical finding"
+      ]
+    },
+    {
+      "id": "RT-E045",
+      "name": "All duplicate sources share one false positive",
+      "input": "Three sources describe the same alleged missing cleanup behavior, but current queue redelivery semantics prevent the alleged stuck-work state.",
+      "expected": [
+        "invalidate the shared false positive",
+        "no CURRENT canonical finding",
+        "preserve all source mappings"
+      ]
+    },
+    {
+      "id": "RT-E046",
+      "name": "Valid and invalid overlapping sources",
+      "input": "Two overlapping sources describe the same workflow; one has current evidence of a violated invariant and concrete bad behavior, while the other alleges a missing control without proving either.",
+      "expected": [
+        "retain the valid source finding if its gate passes",
+        "reject or mark non-current the invalid source claim",
+        "preserve both source mappings"
+      ]
+    },
+    {
+      "id": "RT-E047",
+      "name": "Bounded performance inefficiency defaults P3",
+      "input": "Duplicate unpaginated per-user reads create deterministic extra work, but there is no measured severe impact or supported-limit failure.",
+      "expected": [
+        "real CURRENT defect may survive validity gate",
+        "canonical severity P3",
+        "do not amplify to P2 without independent material impact"
+      ]
+    },
+    {
+      "id": "RT-E048",
+      "name": "Unknown unbounded provider input defaults P3",
+      "input": "Input is unbounded before expensive provider work, but production token, latency, cost, and supported-limit magnitude are unknown.",
+      "expected": [
+        "quantitative uncertainty does not invalidate a verified defect",
+        "canonical severity usually P3",
+        "do not assign P2 from provider/resource involvement alone"
+      ]
+    },
+    {
+      "id": "RT-E049",
+      "name": "Material unauthorized disclosure supports P2",
+      "input": "A reachable unauthenticated operation deterministically discloses another user's private data across the trust boundary.",
+      "expected": [
+        "validity gate passes if current evidence supports the path",
+        "canonical severity P2 may be independently justified",
+        "basis is per-instance privacy/trust-boundary harm"
+      ]
+    },
+    {
+      "id": "RT-E050",
+      "name": "Deterministic rollback or corruption supports P2",
+      "input": "A supported operation deterministically rolls back durable business state incorrectly and can corrupt or lose data.",
+      "expected": [
+        "canonical severity P2 may be independently justified",
+        "basis is deterministic material state/data harm",
+        "do not rely on reviewer severity labels"
+      ]
+    },
+    {
+      "id": "RT-E051",
+      "name": "Fail-closed blocked workflow defaults P3",
+      "input": "A supported workflow is blocked by a deterministic defect, but it fails closed without data, security, or trust-boundary harm.",
+      "expected": [
+        "real CURRENT defect if validity gate passes",
+        "canonical severity P3",
+        "do not amplify to P2 from workflow importance alone"
+      ]
+    },
+    {
+      "id": "RT-E052",
+      "name": "Reviewer count does not amplify severity",
+      "input": "Several reviewers independently report the same bounded defect; current evidence shows limited recoverable impact and no material P2 basis.",
+      "expected": [
+        "one canonical finding when identity matches",
+        "canonical severity remains P3",
+        "reviewer count is not severity evidence"
+      ]
+    },
+    {
+      "id": "RT-E053",
+      "name": "Reformatted copy is not independent",
+      "input": "Report A contains finding X. Report B is a reformatted and paraphrased copy of A with a different filename and finding ID; no independent evidence was produced.",
+      "expected": [
+        "both candidates remain accounted for",
+        "identity and deduplication proceed normally",
+        "B is DERIVATIVE or SHARED ORIGIN evidence",
+        "A and B do not count as two independent corroborating sources",
+        "file count does not inflate confidence, current state, or severity"
+      ]
+    },
+    {
+      "id": "RT-E054",
+      "name": "Same scanner output is one lineage",
+      "input": "Several reports contain the same finding because they all ingest the same scanner output, although the reports have different filenames and source IDs.",
+      "expected": [
+        "all reports remain traceable",
+        "shared evidence origin is recorded",
+        "scanner-derived reports constitute one evidentiary lineage",
+        "no majority or source-count inference is made"
+      ]
+    },
+    {
+      "id": "RT-E055",
+      "name": "Derivative history plus independent current verification",
+      "input": "Historical report A contains finding X. Historical report B copies A. Current source inspection independently confirms X.",
+      "expected": [
+        "A and B are one historical evidentiary lineage",
+        "current inspection is independent current evidence",
+        "current status may be established from the independent current evidence",
+        "the system does not claim three independent confirmations"
+      ]
+    },
+    {
+      "id": "RT-E056",
+      "name": "Derivative conflict does not resolve by count",
+      "input": "Several derivative artifacts say OPEN. A current authoritative independent verification says FIXED.",
+      "expected": [
+        "derivative count does not win",
+        "current authoritative evidence controls current-state determination",
+        "historical and derivative artifacts remain preserved in provenance",
+        "no majority vote occurs"
+      ]
+    }
+  ]
+}

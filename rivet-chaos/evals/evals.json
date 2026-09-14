@@ -1,0 +1,324 @@
+{
+  "skill_name": "rivet-chaos",
+  "version": "0.2.4",
+  "cases": [
+    {
+      "id": "eval-double-submit",
+      "prompt": "Use @rivet-chaos to audit this repository. Focus on realistic misuse, but do not modify the product.",
+      "expected": [
+        "Evaluates all four core personas CU/CR/CH/LA",
+        "Tests duplicate/retry/concurrency behavior when relevant",
+        "Does not modify product code",
+        "Uses FINDING/ALREADY RESILIENT/UNVERIFIED/NOT APPLICABLE outcomes",
+        "Produces five persona reports under docs/reviews/personas"
+      ]
+    },
+    {
+      "id": "eval-no-forced-findings",
+      "prompt": "Run @rivet-chaos on a repository with strong layered server-side guards and tests for a meaningful adversarial scenario.",
+      "expected": [
+        "Does not invent defects to satisfy a quota",
+        "Records meaningful ALREADY RESILIENT scenarios with evidence",
+        "Uses UNVERIFIED where evidence is insufficient",
+        "Does not duplicate the same underlying defect under multiple personas"
+      ]
+    },
+    {
+      "id": "eval-limit-boundary",
+      "prompt": "Run @rivet-chaos on a repository with explicit usage limits and multiple entitlement levels.",
+      "expected": [
+        "Examines boundary minus/at/plus one",
+        "Examines concurrent quota consumption and retries when relevant",
+        "Distinguishes intended policy from a concrete abuse defect"
+      ]
+    },
+    {
+      "id": "eval-shared-invariant-concurrency",
+      "prompt": "Run @rivet-chaos on a repository where two concurrent mutations each pass a sequential count/check and together may violate a shared global invariant.",
+      "expected": [
+        "Challenges the invariant under simultaneous requests",
+        "Inspects transaction boundaries, locks, database constraints, serialization, or conditional updates",
+        "Does not treat an application-level sequential guard as proof of concurrency safety"
+      ]
+    },
+    {
+      "id": "eval-incomplete-idempotency-fingerprint",
+      "prompt": "Run @rivet-chaos on a repository where two different authoritative sources can share identical client metadata while an idempotency or fingerprinting mechanism is present.",
+      "expected": [
+        "Distinguishes replay of one logical request from a different logical source/action",
+        "Checks whether identity binds to the authoritative source or object and materially defining operation fields",
+        "Does not prescribe one universal fingerprint design"
+      ]
+    },
+    {
+      "id": "eval-frontend-only-admission-rule",
+      "prompt": "Run @rivet-chaos on a repository where the UI enforces a resource admission boundary but direct API access may bypass it.",
+      "expected": [
+        "Identifies the authoritative server/backend/database enforcement point",
+        "Investigates direct API bypass when only a client-side guard is present",
+        "Does not create a finding without evidence of an actual bypass"
+      ]
+    },
+    {
+      "id": "eval-idempotent-primary-duplicate-secondary",
+      "prompt": "Run @rivet-chaos on a repository where replay yields one durable primary mutation but may emit multiple notifications, events, webhooks, audit rows, cache changes, or async dispatches.",
+      "expected": [
+        "Inspects side effects before and after the idempotent boundary",
+        "Checks whether replay duplicates secondary effects while preserving the primary mutation",
+        "Records concrete evidence rather than assuming idempotency covers every side effect"
+      ]
+    },
+    {
+      "id": "eval-severity-calibration",
+      "prompt": "Run @rivet-chaos on a repository where duplicate client attempts are contained by the server and persistent state remains correct, with only redundant work or duplicate user-facing messages possible.",
+      "expected": [
+        "Does not inflate the issue to P2 solely because duplicate attempts exist",
+        "Prefers P3 when no authorization, privacy, financial, resource-integrity, durable-state, or business-rule boundary is violated",
+        "Retains higher severity when evidence shows a material integrity, abuse, or recovery impact"
+      ]
+    },
+    {
+      "id": "eval-partial-success-recovery",
+      "prompt": "Run @rivet-chaos on a repository where an early workflow step persists successfully, a later step fails or loses its response, and the user can retry or resume.",
+      "expected": [
+        "Traces authoritative current state after interruption or uncertain success",
+        "Checks resume, reconciliation, safe replay, second-entity prevention, and completed/partial/abandoned state distinctions",
+        "Does not assume that durable persistence of the early step proves end-to-end recoverability"
+      ]
+    },
+    {
+      "id": "eval-representation-confusion",
+      "prompt": "Run @rivet-chaos on a repository where UI, API, or language boundaries may represent the same input differently, such as boolean/string boolean, number/numeric string, null/omitted, empty/missing, enum casing, or stale identifiers.",
+      "expected": [
+        "Investigates representation ambiguity only when it could materially change state, authorization, lifecycle, quota/resource, financial/business, or operational behavior",
+        "Checks duplicated, stale, or reused identifiers when relevant",
+        "Does not turn harmless parser differences into findings or perform broad fuzzing"
+      ]
+    },
+    {
+      "id": "eval-sparse-repository-baseline",
+      "prompt": "Run @rivet-chaos on a repository with no meaningful documentation, no prior reviews, and no tests for the relevant flow.",
+      "expected": [
+        "Reconstructs a behavioral baseline from code, schema, configuration, and authoritative control-flow evidence",
+        "Identifies one strongly supported defect or resilient behavior without inventing product policy",
+        "Classifies an ambiguous business-policy question as UNKNOWN PRODUCT INTENT or UNVERIFIED rather than treating it as a finding"
+      ]
+    },
+    {
+      "id": "eval-coverage-obligation",
+      "prompt": "Run @rivet-chaos on a repository with several documented critical workflows, including one that is easy to overlook because it is not connected to the most obvious controllers.",
+      "expected": [
+        "Builds a concise coverage map that includes the overlooked workflow",
+        "Examines every important workflow or invariant in the map",
+        "Records FINDING, ALREADY RESILIENT, UNVERIFIED, or NOT APPLICABLE rather than silently omitting coverage"
+      ]
+    },
+    {
+      "id": "eval-self-challenge-timing",
+      "prompt": "Run @rivet-chaos on a repository where a suspicious scenario is relevant during discovery but is later disproven by a compensating control.",
+      "expected": [
+        "Generates and considers the relevant scenario before self-challenge",
+        "Does not suppress discovery because a defense might exist or runtime is unavailable",
+        "Performs the later self-challenge and records ALREADY RESILIENT or an equivalent correct outcome"
+      ]
+    },
+    {
+      "id": "eval-global-preprocessing-defense",
+      "prompt": "Run @rivet-chaos on a repository where a handler appears to process an ambiguous raw value incorrectly, but an application-wide preprocessing step canonicalizes it before validation.",
+      "expected": [
+        "Traces the surrounding execution context before finalizing the candidate",
+        "Does not create a false finding when preprocessing preserves the invariant",
+        "Records ALREADY RESILIENT or an equivalent correct outcome with evidence"
+      ]
+    },
+    {
+      "id": "eval-narrower-reachability",
+      "prompt": "Run @rivet-chaos on a repository where a stale or alternate request reaches a real side effect, but type, state, or actor guards limit which resources can be affected.",
+      "expected": [
+        "Keeps the finding when the side effect is real",
+        "Narrows actors, resources, reachability, and impact to the supported scope",
+        "Calibrates severity from actual reachability rather than theoretical maximum impact"
+      ]
+    },
+    {
+      "id": "eval-bounded-concurrent-invariant",
+      "prompt": "Run @rivet-chaos on a repository where a concurrency race can exceed a durable per-object limit, but authentication, finite request size, per-request caps, and throttling tightly bound the maximum effect.",
+      "expected": [
+        "Recognizes the real concurrency and invariant defect",
+        "Accounts for compensating controls and bounded blast radius",
+        "Does not automatically classify the issue as P2 solely because it is concurrent or durable"
+      ]
+    },
+    {
+      "id": "eval-downstream-persistence-constraint",
+      "prompt": "Run @rivet-chaos on a repository where local application code appears vulnerable to duplicate or invalid state, but an authoritative persistence constraint prevents the invariant violation.",
+      "expected": [
+        "Traces the authoritative persistence behavior",
+        "Records ALREADY RESILIENT rather than FINDING when the constraint fully protects the invariant",
+        "Does not retain a weaker finding because the local code looked suspicious"
+      ]
+    },
+    {
+      "id": "eval-lifecycle-observer-defense",
+      "prompt": "Run @rivet-chaos on a repository where a local deletion path appears to omit cleanup, but repository-visible lifecycle hooks perform the cleanup.",
+      "expected": [
+        "Traces the surrounding execution context and lifecycle behavior",
+        "Does not create a false finding when cleanup is actually performed",
+        "Records ALREADY RESILIENT or an equivalent evidence-backed outcome"
+      ]
+    },
+    {
+      "id": "eval-same-mechanism-sibling-sweep-positive",
+      "prompt": "Run @rivet-chaos on a repository where an evidenced defect in one entry point and a directly related sibling path share the same violated invariant and root enforcement omission.",
+      "expected": [
+        "Performs a bounded inspection of the directly related sibling after the invariant, mechanism, and affected boundary are evidenced",
+        "Classifies the primary and sibling independently rather than transferring the primary result",
+        "Records shared-mechanism overlap without performing canonical triage or merging findings"
+      ]
+    },
+    {
+      "id": "eval-same-mechanism-sibling-sweep-boundedness",
+      "prompt": "Run @rivet-chaos on a repository where nearby code looks similar but either the violated invariant or the root mechanism differs materially.",
+      "expected": [
+        "Stops the sibling sweep when invariant or mechanism identity is not established",
+        "Does not manufacture a candidate from shared names, directories, framework primitives, or table families",
+        "Does not turn the sibling search into unrelated repository-wide review"
+      ]
+    },
+    {
+      "id": "eval-rivettriage-boundary",
+      "prompt": "Run @rivet-chaos on a repository where two independently evidenced manifestations strongly overlap and share a mechanism.",
+      "expected": [
+        "Records the shared mechanism, overlap, and independent evidence",
+        "Does not assign canonical primary, merged, or false-positive disposition",
+        "Does not suppress an independently actionable manifestation solely because it overlaps another finding"
+      ]
+    },
+    {
+      "id": "eval-unsupported-actor-capability",
+      "prompt": "Run @rivet-chaos on a repository where a plausible impact requires the actor to forge trusted authority, write authoritative state directly, possess administrator credentials, or control infrastructure without an evidenced path.",
+      "expected": [
+        "Checks the actor's authentication, reachable actions, inputs, state, and visible resources before confirming the scenario",
+        "Does not silently assume the unsupported capability",
+        "Narrows, rejects, or classifies the scenario as UNVERIFIED under the existing outcome vocabulary"
+      ]
+    },
+    {
+      "id": "eval-cross-persona-recurrence-not-proof",
+      "prompt": "Run @rivet-chaos where CU, CH, and LA independently encounter the same questionable mechanism but current evidence remains insufficient.",
+      "expected": [
+        "Treats recurrence as discovery evidence or corroboration only",
+        "Does not upgrade UNVERIFIED to FINDING or increase severity because several personas repeated the claim",
+        "Still requires implementation, reachability, and consequence evidence"
+      ]
+    },
+    {
+      "id": "eval-complete-adversarial-path",
+      "prompt": "Run @rivet-chaos on a repository where an actor action reaches a specific implementation or state mechanism, violates an established invariant, and produces a supported consequence.",
+      "expected": [
+        "Traces and records the actor action, reachable mechanism, violated invariant, and supported consequence",
+        "May classify the scenario as FINDING when the remaining evidence and self-challenge support it",
+        "Calibrates impact and severity from the reachable actor, boundary, controls, and supported consequence"
+      ]
+    },
+    {
+      "id": "eval-missing-adversarial-path-link",
+      "prompt": "Run @rivet-chaos on a repository where a suspicious actor action reaches code, but the claimed consequence depends on an unproven intermediate state transition or downstream effect.",
+      "expected": [
+        "Does not report the full consequence as established",
+        "Narrows the claim or uses UNVERIFIED when the missing path link is material",
+        "Does not compensate for missing evidence by increasing severity"
+      ]
+    },
+    {
+      "id": "eval-research-vs-reporting-scope",
+      "prompt": "Run @rivet-chaos where the reviewer inspects adjacent helpers and modules to find controls, but notices an unrelated defect-like pattern outside the relevant persona mechanism and without sufficient review context.",
+      "expected": [
+        "Allows adjacent inspection when it is needed for reachability, controls, authoritative behavior, or the bounded sibling sweep",
+        "Keeps inspected-but-unrelated code outside the reportable finding scope",
+        "Does not let research expansion become generic specialist review or opportunistic remediation"
+      ]
+    },
+    {
+      "id": "eval-sibling-already-resilient",
+      "prompt": "Run @rivet-chaos where the primary path is vulnerable but a directly related sibling shares the same conceptual operation and has an authoritative enforcement control that preserves the invariant.",
+      "expected": [
+        "Keeps the primary manifestation as FINDING when its evidence supports that outcome",
+        "Classifies the protected sibling independently as ALREADY RESILIENT",
+        "Does not propagate the primary severity, impact, or uncertainty to the sibling"
+      ]
+    },
+    {
+      "id": "eval-same-target-cardinality-negative-control",
+      "prompt": "Run @rivet-chaos on a repository where two concurrent operations target the same object, but the claimed consequence requires two independent objects to be mutated or removed.",
+      "expected": [
+        "Preserves the same-target identity and recognizes that two requests do not establish two independent durable mutations",
+        "Does not confirm the claimed consequence from the literal path",
+        "Corrects or narrows the path, uses UNVERIFIED, or rejects it rather than retaining an incorrectly closed FINDING"
+      ]
+    },
+    {
+      "id": "eval-distinct-target-shared-invariant-positive",
+      "prompt": "Run @rivet-chaos on a repository where two distinct actors or operations target two distinct objects, both read the same shared aggregate condition, and independent commits combine to violate that invariant.",
+      "expected": [
+        "Preserves the distinct actors, distinct targets, shared precondition, and independent mutations in the path",
+        "Distinguishes this case from same-target duplicate requests",
+        "May classify FINDING when the exact final aggregate state and consequence are evidenced"
+      ]
+    },
+    {
+      "id": "eval-initial-state-mismatch",
+      "prompt": "Run @rivet-chaos on a repository where a proposed path claims two operations pass a guard, but the stated starting state would make one or both operations fail that guard.",
+      "expected": [
+        "Checks whether the initial state is sufficient for the claimed reads and transitions",
+        "Does not confirm the literal path with an impossible starting state",
+        "Corrects the starting state only when evidence supports it, otherwise preserves uncertainty or rejects the scenario"
+      ]
+    },
+    {
+      "id": "eval-cardinality-mismatch",
+      "prompt": "Run @rivet-chaos on a repository where the claimed final consequence requires N independent mutations but the demonstrated path establishes fewer than N effective durable mutations.",
+      "expected": [
+        "Counts effective durable mutations and preserves object identity",
+        "Does not confirm the consequence when the demonstrated cardinality is insufficient",
+        "Narrows, corrects, or classifies the scenario as UNVERIFIED rather than compensating with severity"
+      ]
+    },
+    {
+      "id": "eval-correct-root-defect-wrong-reproduction",
+      "prompt": "Run @rivet-chaos on a repository containing a real root mechanism defect, where the first proposed reproduction path is wrong but a different evidence-supported actor and object arrangement exercises the defect correctly.",
+      "expected": [
+        "Rejects or corrects the unsupported first path instead of preserving it",
+        "Retains the real root defect and reconstructs the evidence-supported actor/object path",
+        "Classifies FINDING only after the corrected literal path and consequence are closed"
+      ]
+    },
+    {
+      "id": "eval-duplicate-request-idempotent-effect",
+      "prompt": "Run @rivet-chaos on a repository where two identical requests reach the same target, but authoritative enforcement makes only one durable state change.",
+      "expected": [
+        "Traces the exact resulting state and recognizes the idempotent or unique durable effect",
+        "Does not infer a duplicate durable consequence merely from duplicate requests",
+        "Classifies the scenario according to the actual state and any independently evidenced secondary effects"
+      ]
+    },
+    {
+      "id": "eval-side-effect-cardinality",
+      "prompt": "Run @rivet-chaos on a repository where two operations execute, but uniqueness or idempotency collapses their downstream durable notification, event, audit row, or dispatch into one surviving effect.",
+      "expected": [
+        "Separately accounts for primary mutations and downstream durable side-effect cardinality",
+        "Does not claim duplicate durable side effects without evidence of two surviving effects",
+        "Bases impact on the actual persisted or dispatched result rather than operation count alone"
+      ]
+    },
+    {
+      "id": "eval-counterfactual-self-challenge",
+      "prompt": "Run @rivet-chaos on a repository where a proposed finding sounds plausible, but literal execution by the exact stated actors against the exact stated objects does not produce the claimed final state.",
+      "expected": [
+        "Performs the final counterfactual literal-execution challenge before confirming FINDING",
+        "Catches the mismatch and does not leave the proposed finding unchanged as confirmed",
+        "Corrects the path only with evidence, otherwise narrows, uses UNVERIFIED, or rejects the scenario"
+      ]
+    }
+  ]
+}

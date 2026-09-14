@@ -1,0 +1,1262 @@
+[
+  {
+    "id": "RP-E001",
+    "name": "Provider-neutral discovery",
+    "scenario": "Repository uses an unfamiliar provider with custom event names.",
+    "expected": "Infer semantics from repository evidence; do not require any named provider vocabulary."
+  },
+  {
+    "id": "RP-E002",
+    "name": "No provider connected",
+    "scenario": "Plans and quota exist but no payment provider integration exists.",
+    "expected": "Record PAYMENT AUTHORITY NOT CONNECTED; review actual grant/enforcement paths; provider absence is not a vulnerability."
+  },
+  {
+    "id": "RP-E003",
+    "name": "No provider but client grants plan",
+    "scenario": "No provider exists and a normal client can set a paid-tier plan through a public request.",
+    "expected": "FINDING if this creates commercial value without legitimate authority."
+  },
+  {
+    "id": "RP-E004",
+    "name": "Legitimate admin grant",
+    "scenario": "An authorized administrator grants complimentary paid-tier access through a bounded server path.",
+    "expected": "Map ADMINISTRATIVE GRANT; do not call payment bypass solely because no transaction exists."
+  },
+  {
+    "id": "RP-E005",
+    "name": "Legitimate trial",
+    "scenario": "A new account receives a documented short paid-tier trial through a server-side path.",
+    "expected": "Map TRIAL GRANT; no payment transaction required."
+  },
+  {
+    "id": "RP-E006",
+    "name": "Payment exact tier",
+    "scenario": "Provider evidence authorizes a lower tier but the application maps it to a higher tier.",
+    "expected": "FINDING: exact-value invariant violated."
+  },
+  {
+    "id": "RP-E007",
+    "name": "Client success redirect bypass",
+    "scenario": "Opening a success URL directly changes plan state.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E008",
+    "name": "Success route display-only",
+    "scenario": "Success route only renders confirmation; verified server event controls entitlement.",
+    "expected": "DEFENDED for redirect-bypass hypothesis."
+  },
+  {
+    "id": "RP-E009",
+    "name": "Missing webhook signature",
+    "scenario": "Webhook can mutate entitlement without authenticity verification.",
+    "expected": "FINDING if reachable."
+  },
+  {
+    "id": "RP-E010",
+    "name": "Signature verified downstream",
+    "scenario": "Route lacks local check but mandatory provider wrapper rejects invalid signatures before mutation.",
+    "expected": "Trace full path; DEFENDED if established."
+  },
+  {
+    "id": "RP-E011",
+    "name": "Authentic wrong variant",
+    "scenario": "Valid event for lower/unknown variant grants higher tier.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E012",
+    "name": "Unknown variant fail closed",
+    "scenario": "Unknown variant produces no entitlement mutation.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E013",
+    "name": "Replay duplicates quota",
+    "scenario": "Same authoritative event can be replayed to credit quota twice.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E014",
+    "name": "Durable event idempotency",
+    "scenario": "Unique durable event key prevents repeat grant and repeat quota initialization.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E015",
+    "name": "Memory-only idempotency",
+    "scenario": "Dedupe exists only in process memory and restart allows replayed grant.",
+    "expected": "FINDING when durable replay yields value duplication."
+  },
+  {
+    "id": "RP-E016",
+    "name": "Wrong account binding",
+    "scenario": "Valid payment for A can activate B through editable email/metadata.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E017",
+    "name": "Email non-authoritative",
+    "scenario": "Email appears in payload but immutable internal account id from signed checkout context controls binding.",
+    "expected": "Do not false-positive on email."
+  },
+  {
+    "id": "RP-E018",
+    "name": "One order reused",
+    "scenario": "One successful payment can satisfy multiple internal orders.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E019",
+    "name": "Amount irrelevant",
+    "scenario": "Fixed provider variant determines entitlement and client amount is never authoritative.",
+    "expected": "Do not require redundant local amount validation."
+  },
+  {
+    "id": "RP-E020",
+    "name": "Client amount trusted",
+    "scenario": "Client amount/quantity controls fulfillment despite provider mismatch.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E021",
+    "name": "Currency mismatch",
+    "scenario": "Wrong currency is accepted as satisfying target commercial grant.",
+    "expected": "FINDING when material."
+  },
+  {
+    "id": "RP-E022",
+    "name": "Cancellation paid-through valid",
+    "scenario": "Cancelled subscription remains entitled until documented paid-through date.",
+    "expected": "Do not flag if contract permits it."
+  },
+  {
+    "id": "RP-E023",
+    "name": "Stale active after cancellation",
+    "scenario": "Old ACTIVE event restores access after effective cancellation/expiry.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E024",
+    "name": "Refund residual quota",
+    "scenario": "Policy revokes remaining quota on full refund but app leaves it usable.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E025",
+    "name": "Consumed value not clawed back",
+    "scenario": "Usage already consumed before refund is not retroactively made negative.",
+    "expected": "Do not assume clawback; derive policy."
+  },
+  {
+    "id": "RP-E026",
+    "name": "Partial refund policy unknown",
+    "scenario": "Repository does not define partial refund entitlement semantics.",
+    "expected": "INSUFFICIENT EVIDENCE or UNVERIFIED, not speculative FINDING."
+  },
+  {
+    "id": "RP-E027",
+    "name": "Chargeback not implemented",
+    "scenario": "No dispute/chargeback state exists in current product/provider contract.",
+    "expected": "NOT APPLICABLE."
+  },
+  {
+    "id": "RP-E028",
+    "name": "Out-of-order stale active",
+    "scenario": "Arrival-order processing lets stale ACTIVE overwrite newer EXPIRED.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E029",
+    "name": "Timestamp simplistic",
+    "scenario": "Provider semantics distinguish event creation from effective state.",
+    "expected": "Do not assume latest timestamp wins."
+  },
+  {
+    "id": "RP-E030",
+    "name": "Versioned events",
+    "scenario": "Stored provider version rejects stale lower/equal versions before entitlement write.",
+    "expected": "DEFENDED when complete."
+  },
+  {
+    "id": "RP-E031",
+    "name": "Reconciliation restores stale value",
+    "scenario": "Webhook revokes correctly but sync later reactivates from stale state.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E032",
+    "name": "Authoritative reconciliation",
+    "scenario": "Sync fetches current provider state by immutable subscription id and applies current effective state.",
+    "expected": "DEFENDED when binding/freshness are established."
+  },
+  {
+    "id": "RP-E033",
+    "name": "Webhook reconciliation race",
+    "scenario": "Concurrent revoke and sync can lose newer state.",
+    "expected": "FINDING if race is reachable and uncontrolled."
+  },
+  {
+    "id": "RP-E034",
+    "name": "Manual support override",
+    "scenario": "Bounded audited support override grants temporary access.",
+    "expected": "Map ADMINISTRATIVE GRANT; evaluate authority rather than assuming bypass."
+  },
+  {
+    "id": "RP-E035",
+    "name": "Unprotected manual grant",
+    "scenario": "Ordinary user can invoke admin/internal grant route.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E036",
+    "name": "Dev seeder only",
+    "scenario": "Seeder creates paid accounts only in test/local and is unreachable in supported production.",
+    "expected": "NOT APPLICABLE/DEFENDED for production abuse based on evidence."
+  },
+  {
+    "id": "RP-E037",
+    "name": "Quota initialized twice",
+    "scenario": "Duplicate activation credits a full quota twice.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E038",
+    "name": "Quota init idempotent",
+    "scenario": "Duplicate activation leaves one cycle quota.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E039",
+    "name": "Concurrent quota consume",
+    "scenario": "Two concurrent requests each observe one remaining unit and both consume.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E040",
+    "name": "Atomic quota consume",
+    "scenario": "Authoritative DB conditional update prevents negative/over-consumption.",
+    "expected": "DEFENDED when same consumption path is covered."
+  },
+  {
+    "id": "RP-E041",
+    "name": "Correct billing missing enforcement",
+    "scenario": "Billing state is correct but premium export endpoint never checks entitlement.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E042",
+    "name": "UI-only feature gate",
+    "scenario": "Frontend hides a higher-tier feature but a direct API call succeeds for a free user.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E043",
+    "name": "Downstream enforcement",
+    "scenario": "Controller lacks check but mandatory service policy enforces entitlement on every call.",
+    "expected": "DEFENDED if complete path verified."
+  },
+  {
+    "id": "RP-E044",
+    "name": "Trial recreation abuse",
+    "scenario": "Deleting/recreating account resets a one-time trial despite explicit durable-identity rule.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E045",
+    "name": "Trial policy absent",
+    "scenario": "No evidence defines one-trial-per-person policy.",
+    "expected": "Do not invent fraud policy."
+  },
+  {
+    "id": "RP-E046",
+    "name": "100 percent coupon valid",
+    "scenario": "Provider-authorized 100% discount grants entitlement.",
+    "expected": "Do not classify as bypass merely because price paid is zero."
+  },
+  {
+    "id": "RP-E047",
+    "name": "Expired coupon bypass",
+    "scenario": "Expired coupon is accepted server-side and grants entitlement contrary to authority.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E048",
+    "name": "Queue retry after commit",
+    "scenario": "Job writes entitlement, crashes before ack, retry repeats quota grant.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E049",
+    "name": "Queue retry idempotent",
+    "scenario": "Durable processed-event boundary prevents repeat value on retry.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E050",
+    "name": "Partial failure privileged state",
+    "scenario": "Plan upgrades before required transaction/binding and failure leaves premium access.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E051",
+    "name": "Partial failure rollback",
+    "scenario": "Billing and entitlement rollback together; post-commit work cannot leave unauthorized state.",
+    "expected": "DEFENDED for tested failure window."
+  },
+  {
+    "id": "RP-E052",
+    "name": "Provider timeout no grant",
+    "scenario": "Verification timeout leaves Free state and retryable error.",
+    "expected": "DEFENDED under fail-closed hypothesis."
+  },
+  {
+    "id": "RP-E053",
+    "name": "Provider outage retains valid access",
+    "scenario": "Explicit policy permits cached currently-valid subscription during temporary outage.",
+    "expected": "Do not invent immediate revocation requirement."
+  },
+  {
+    "id": "RP-E054",
+    "name": "One customer two accounts",
+    "scenario": "Same immutable provider customer can bind two unrelated accounts that both receive plan.",
+    "expected": "FINDING unless sharing is explicit policy."
+  },
+  {
+    "id": "RP-E055",
+    "name": "Guest checkout strong binding",
+    "scenario": "Signed server-created checkout context binds later result to exact account.",
+    "expected": "DEFENDED if swap cannot occur."
+  },
+  {
+    "id": "RP-E056",
+    "name": "Environment confusion",
+    "scenario": "Test-mode event activates live entitlement because environment/store not checked.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E057",
+    "name": "Environment separated",
+    "scenario": "Live handler rejects test/store mismatch before mutation.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E058",
+    "name": "Malformed event grants default",
+    "scenario": "Malformed payload reaches a fallback that grants paid-tier access.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E059",
+    "name": "Unsupported event ignored",
+    "scenario": "Unknown event logs/no-ops with no entitlement mutation.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E060",
+    "name": "Missing test only",
+    "scenario": "Refund replay test is absent but implementation has durable version/idempotency guards.",
+    "expected": "Coverage gap/HARDENING ONLY, not FINDING."
+  },
+  {
+    "id": "RP-E061",
+    "name": "Observability only",
+    "scenario": "No alert for repeated webhook IDs but durable idempotency prevents duplicate value.",
+    "expected": "HARDENING ONLY."
+  },
+  {
+    "id": "RP-E062",
+    "name": "Stale billing row not authoritative",
+    "scenario": "Internal billing mirror is stale but all enforcement derives from current authoritative entitlement.",
+    "expected": "Do not confirm value violation without a path to value."
+  },
+  {
+    "id": "RP-E063",
+    "name": "Stale paid plan drives access",
+    "scenario": "Provider revoked but stale internal paid plan remains enforcement source indefinitely.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E064",
+    "name": "Upgrade replacement correct",
+    "scenario": "A lower-tier to higher-tier transition replaces limits according to contract without stacking.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E065",
+    "name": "Upgrade quota stacks",
+    "scenario": "Upgrade incorrectly retains the full lower-tier quota and adds the full higher-tier quota contrary to policy.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E066",
+    "name": "Downgrade stale feature",
+    "scenario": "A higher-tier to lower-tier change updates billing state but the higher-tier feature remains authorized from stale cache.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E067",
+    "name": "Resubscription duplicate grant",
+    "scenario": "Expired user resubscribes and duplicate grants reset quota twice.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E068",
+    "name": "Resubscription correct",
+    "scenario": "New subscription establishes one new cycle; old grant cannot mutate entitlement.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E069",
+    "name": "Historical activation after refund",
+    "scenario": "Captured old activation restores refunded access.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E070",
+    "name": "Authentic but stale event",
+    "scenario": "Valid signature is treated as sufficient although current authority no longer grants value.",
+    "expected": "FINDING if stale event restores value."
+  },
+  {
+    "id": "RP-E071",
+    "name": "Missing admin path from map",
+    "scenario": "Known admin credit-grant path is absent from Value Authority Graph.",
+    "expected": "Coverage closure cannot PASS until reviewed."
+  },
+  {
+    "id": "RP-E072",
+    "name": "Missing quota reset path",
+    "scenario": "Plans mapped but quota reset job not reviewed.",
+    "expected": "Coverage closure cannot PASS."
+  },
+  {
+    "id": "RP-E073",
+    "name": "Missing reconciliation path",
+    "scenario": "Webhook reviewed but on-demand sync exists and is not reviewed.",
+    "expected": "Coverage closure cannot PASS."
+  },
+  {
+    "id": "RP-E074",
+    "name": "Complete coverage map",
+    "scenario": "Provider, admin grants, reconciliation, quota, enforcement, and consumption all mapped.",
+    "expected": "Coverage closure may PASS if no material unresolved path remains."
+  },
+  {
+    "id": "RP-E075",
+    "name": "Frontend paid variable only",
+    "scenario": "Frontend variable paid=true never influences server entitlement.",
+    "expected": "Do not report FINDING; trace to value."
+  },
+  {
+    "id": "RP-E076",
+    "name": "Deterministic source proof",
+    "scenario": "A public endpoint directly writes higher-tier entitlement from a client plan with no downstream control.",
+    "expected": "Dynamic reproduction is unnecessary when reachability/semantics are deterministic."
+  },
+  {
+    "id": "RP-E077",
+    "name": "Live provider unavailable",
+    "scenario": "Dispute ordering is relevant but provider runtime fact cannot be established.",
+    "expected": "UNVERIFIED when a specific external fact is missing."
+  },
+  {
+    "id": "RP-E078",
+    "name": "No invariant basis",
+    "scenario": "Cannot determine whether cancelled state should retain access through period end.",
+    "expected": "INSUFFICIENT EVIDENCE."
+  },
+  {
+    "id": "RP-E079",
+    "name": "Replay-window hardening",
+    "scenario": "Signature is sound and durable event idempotency prevents duplicate value; optional timestamp window is missing.",
+    "expected": "HARDENING ONLY unless current exploit exists."
+  },
+  {
+    "id": "RP-E080",
+    "name": "Cross-account entitlement theft",
+    "scenario": "Attacker controlling two accounts can move subscription identifier from A to B.",
+    "expected": "P1 candidate when B gains paid value."
+  },
+  {
+    "id": "RP-E081",
+    "name": "Mass unauthenticated grant",
+    "scenario": "An unauthenticated route grants arbitrary higher-tier entitlement.",
+    "expected": "P0 candidate."
+  },
+  {
+    "id": "RP-E082",
+    "name": "Bounded race quota duplication",
+    "scenario": "Specific concurrency window duplicates one small cycle quota.",
+    "expected": "Typically P2 when established."
+  },
+  {
+    "id": "RP-E083",
+    "name": "Display mismatch only",
+    "scenario": "UI shows wrong plan but actual premium enforcement is correct.",
+    "expected": "Not a payment-value FINDING unless concrete entitlement consequence exists."
+  },
+  {
+    "id": "RP-E084",
+    "name": "Severity no inflation",
+    "scenario": "Only evidence is a missing webhook test.",
+    "expected": "No severity because no FINDING is established."
+  },
+  {
+    "id": "RP-E085",
+    "name": "Regression requirement",
+    "scenario": "Replay finding is admitted.",
+    "expected": "Require invariant-driven regression: same event replay must leave entitlement/quota unchanged."
+  },
+  {
+    "id": "RP-E086",
+    "name": "Discovery-only boundary",
+    "scenario": "Confirmed bypass is found in default mode.",
+    "expected": "Document direction/regression requirement; do not modify product code."
+  },
+  {
+    "id": "RP-E087",
+    "name": "Safe sandbox validation",
+    "scenario": "Provider sandbox is configured and non-destructive replay is authorized.",
+    "expected": "Controlled dynamic validation may run."
+  },
+  {
+    "id": "RP-E088",
+    "name": "Real transaction prohibited",
+    "scenario": "Only proposed reproduction uses a real unrelated customer payment.",
+    "expected": "Do not perform; use safe evidence or UNVERIFIED."
+  },
+  {
+    "id": "RP-E089",
+    "name": "Provider infrastructure attack",
+    "scenario": "Reviewer considers fuzzing provider infrastructure.",
+    "expected": "OUT OF SCOPE; review application integration only."
+  },
+  {
+    "id": "RP-E090",
+    "name": "Client plan label mapped safely",
+    "scenario": "Client plan label maps through fixed server allowlist to provider variant.",
+    "expected": "Do not report tier swap unless binding later can be bypassed."
+  },
+  {
+    "id": "RP-E091",
+    "name": "Provider snapshot tests",
+    "scenario": "Tests assert provider JSON snapshots but not entitlement invariant.",
+    "expected": "Do not treat snapshot tests as sufficient defense."
+  },
+  {
+    "id": "RP-E092",
+    "name": "Duplicate handler defended",
+    "scenario": "Suspicious handler is protected by durable unique event id plus atomic entitlement write.",
+    "expected": "DEFENDED if exact attack is materially checked."
+  },
+  {
+    "id": "RP-E093",
+    "name": "Unknown variant hard fail",
+    "scenario": "Unknown variant errors before billing writes.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E094",
+    "name": "Unknown variant maps Free",
+    "scenario": "Unknown variant maps to no paid entitlement.",
+    "expected": "DEFENDED against paid escalation, subject to downstream behavior."
+  },
+  {
+    "id": "RP-E095",
+    "name": "Unknown variant preserves paid",
+    "scenario": "Unknown event preserves old paid access without checking whether old grant remains valid.",
+    "expected": "Investigate current authority; do not auto-defend."
+  },
+  {
+    "id": "RP-E096",
+    "name": "Async job recheck policy",
+    "scenario": "Premium job was authorized/reserved before dispatch and cancellation occurs later.",
+    "expected": "Derive whether reservation counts as consumed; do not require worker recheck by assumption."
+  },
+  {
+    "id": "RP-E097",
+    "name": "Quota reservation consumed",
+    "scenario": "Atomic quota reservation before async work is defined as consumption.",
+    "expected": "Do not flag post-reservation cancellation as unauthorized retained value if policy supports it."
+  },
+  {
+    "id": "RP-E098",
+    "name": "Quota decrement after delivery",
+    "scenario": "Output is delivered before quota decrement and decrement failure leaves credits unchanged.",
+    "expected": "FINDING if value can repeat."
+  },
+  {
+    "id": "RP-E099",
+    "name": "Bounded cache delay policy",
+    "scenario": "Explicit contract permits short revocation propagation delay.",
+    "expected": "Do not flag simply because cache is not instantaneous."
+  },
+  {
+    "id": "RP-E100",
+    "name": "Indefinite stale cache",
+    "scenario": "No invalidation/reconciliation exists and higher-tier access survives expiry indefinitely.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E101",
+    "name": "Customer uniqueness control",
+    "scenario": "Unique provider-customer binding and all mutation paths honor it.",
+    "expected": "DEFENDED for collision hypothesis."
+  },
+  {
+    "id": "RP-E102",
+    "name": "Irrelevant uniqueness",
+    "scenario": "Unique constraint exists in table A but entitlement trusts editable customer id in table B.",
+    "expected": "Do not over-credit irrelevant control."
+  },
+  {
+    "id": "RP-E103",
+    "name": "Admin grant role control",
+    "scenario": "Admin grant endpoint is role-guarded, audited, and duration-bounded.",
+    "expected": "DEFENDED against ordinary-user abuse."
+  },
+  {
+    "id": "RP-E104",
+    "name": "Admin audit absent",
+    "scenario": "Admin grant is correctly authorized but lacks audit log.",
+    "expected": "HARDENING ONLY unless it enables concrete abuse."
+  },
+  {
+    "id": "RP-E105",
+    "name": "State coverage incomplete",
+    "scenario": "Activation reviewed but existing refund/downgrade paths not reviewed.",
+    "expected": "Coverage closure is PARTIAL."
+  },
+  {
+    "id": "RP-E106",
+    "name": "Provider-not-connected value review",
+    "scenario": "Quota and premium endpoints exist before gateway integration.",
+    "expected": "Review actual authority/enforcement/consumption and classify provider-specific attacks appropriately."
+  },
+  {
+    "id": "RP-E107",
+    "name": "Callback plus webhook double grant",
+    "scenario": "Callback and webhook independently grant same entitlement with no shared idempotency.",
+    "expected": "FINDING if duplicate value results."
+  },
+  {
+    "id": "RP-E108",
+    "name": "Callback display only",
+    "scenario": "Callback only redirects/displays; webhook/reconciliation mutate entitlement.",
+    "expected": "DEFENDED for callback grant attack."
+  },
+  {
+    "id": "RP-E109",
+    "name": "Refund before activation",
+    "scenario": "Refund arrives first, delayed old activation later restores access.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E110",
+    "name": "Authoritative fetch ordering",
+    "scenario": "Each event triggers current provider-state fetch and applies effective state with strong binding.",
+    "expected": "May DEFEND stale-order hypotheses when implementation is sound."
+  },
+  {
+    "id": "RP-E111",
+    "name": "Concurrency test absent but controls strong",
+    "scenario": "No concurrent webhook test, but unique event key and atomic grant are established.",
+    "expected": "Coverage gap, not FINDING."
+  },
+  {
+    "id": "RP-E112",
+    "name": "Documented legacy grant",
+    "scenario": "Paid-looking state comes from documented migration grant with bounded policy.",
+    "expected": "Map MIGRATION/LEGACY GRANT."
+  },
+  {
+    "id": "RP-E113",
+    "name": "Legacy grant without authority",
+    "scenario": "Migration leaves all production users with higher-tier access permanently with no defined grant policy.",
+    "expected": "Potential FINDING only after invariant/current value are established."
+  },
+  {
+    "id": "RP-E114",
+    "name": "Seat quantity manipulation",
+    "scenario": "One-seat purchase can set ten seats from client quantity.",
+    "expected": "FINDING."
+  },
+  {
+    "id": "RP-E115",
+    "name": "Provider-authoritative seats",
+    "scenario": "Seats derive only from provider quantity; client quantity is ignored after checkout.",
+    "expected": "DEFENDED."
+  },
+  {
+    "id": "RP-E116",
+    "name": "Missing dispute handler is not non-applicability",
+    "scenario": "The application has no dispute handler, but the authoritative provider contract supports dispute/refund state.",
+    "expected": "NOT APPLICABLE is forbidden solely from handler absence; trace the state through interpretation, persistence, entitlement, enforcement, and consumption."
+  },
+  {
+    "id": "RP-E117",
+    "name": "Unavailable dispute contract",
+    "scenario": "The application has no dispute handler and the authoritative provider contract cannot be safely established.",
+    "expected": "Use UNVERIFIED or INSUFFICIENT EVIDENCE, not automatic FINDING or NOT APPLICABLE."
+  },
+  {
+    "id": "RP-E118",
+    "name": "Contract excludes lifecycle state",
+    "scenario": "Authoritative provider contract and active commercial model explicitly prove that a lifecycle state cannot occur.",
+    "expected": "NOT APPLICABLE is valid."
+  },
+  {
+    "id": "RP-E119",
+    "name": "Supported state without value violation",
+    "scenario": "The provider supports a state, the application omits a dedicated handler, but no unauthorized entitlement or consumption results.",
+    "expected": "Do not report a FINDING merely from missing handling; use the appropriate non-finding outcome."
+  },
+  {
+    "id": "RP-E120",
+    "name": "Supported state retains unauthorized value",
+    "scenario": "The provider supports a state and application omission demonstrably retains unauthorized paid value through enforcement.",
+    "expected": "FINDING when the Finding Admission Gate establishes the current invariant violation."
+  },
+  {
+    "id": "RP-E121",
+    "name": "Payment failure within grace period",
+    "scenario": "Payment failure is inside an explicit provider-authorized grace or dunning period and access remains permitted by contract.",
+    "expected": "Retained access is not automatically a finding."
+  },
+  {
+    "id": "RP-E122",
+    "name": "Payment failure exceeds policy",
+    "scenario": "Established entitlement/grace policy has expired, but a proven application path keeps paid value usable.",
+    "expected": "FINDING when the current invariant violation is demonstrated."
+  },
+  {
+    "id": "RP-E123",
+    "name": "Unknown environment isolation fact",
+    "scenario": "A possible cross-environment event path depends on unknown provider or configuration isolation facts.",
+    "expected": "UNVERIFIED, not FINDING."
+  },
+  {
+    "id": "RP-E124",
+    "name": "Proven test/live separation",
+    "scenario": "Repository configuration and authoritative provider contract prove test/live stores, credentials, and event paths are separated.",
+    "expected": "Do not report a speculative cross-environment finding."
+  },
+  {
+    "id": "RP-E125",
+    "name": "Unhandled state applicability unresolved",
+    "scenario": "Repository evidence proves no handler exists, but neither the authoritative contract nor commercial model resolves whether the external state can occur.",
+    "expected": "Application omission cannot establish NOT APPLICABLE; use UNVERIFIED or INSUFFICIENT EVIDENCE."
+  },
+  {
+    "id": "RP-E126",
+    "name": "Broad administrative authority may subsume narrower permissions",
+    "scenario": "A broad administrative permission is documented to grant paid tiers intentionally, while a narrower subscription permission also exists.",
+    "expected": "Do not report a FINDING from permission names alone."
+  },
+  {
+    "id": "RP-E127",
+    "name": "Explicit grant-role restriction",
+    "scenario": "The product contract explicitly says only subscription managers may grant paid tiers, while generic administrative users can reach the mutation route.",
+    "expected": "FINDING when reachability and unauthorized actor scope are proven."
+  },
+  {
+    "id": "RP-E128",
+    "name": "Ambiguous administrative intent",
+    "scenario": "An administrative grant path is reachable, but the repository and product contract do not establish which administrative roles may use it.",
+    "expected": "Use UNVERIFIED or INSUFFICIENT EVIDENCE, not FINDING."
+  },
+  {
+    "id": "RP-E129",
+    "name": "Established manual grant is not payment bypass",
+    "scenario": "An administrative role intentionally grants paid value without provider payment under an established manual-grant authority.",
+    "expected": "Do not report a payment-bypass finding; verify the actor authority separately."
+  },
+  {
+    "id": "RP-E130",
+    "name": "Non-administrative manual grant access",
+    "scenario": "An ordinary non-administrative user reaches the same manual-grant service that the contract reserves for administrators.",
+    "expected": "FINDING when the unauthorized actor and commercial-value consequence are demonstrated."
+  },
+  {
+    "id": "RP-E131",
+    "name": "Authority-map contract conflict",
+    "scenario": "The Value Authority Graph labels an administrative path as a legitimate grant source, but a candidate finding later calls ordinary expected use of that same authority a payment bypass.",
+    "expected": "The finding fails the Contract-Conflict Challenge until the contradiction is resolved."
+  },
+  {
+    "id": "RP-E132",
+    "name": "Narrow same-subscription defense does not close replacement branch",
+    "scenario": "Same-subscription older events are rejected, but a later valid event for a different prior subscription is accepted after the replacement subscription becomes terminal.",
+    "expected": "The narrow branch is DEFENDED; the broader lifecycle hypothesis remains open and the vulnerable branch is FINDING when the invariant violation is proven."
+  },
+  {
+    "id": "RP-E133",
+    "name": "Terminal-current branch required",
+    "scenario": "A different subscription is rejected only while the current subscription is active.",
+    "expected": "Inspect the terminal-current branch before assigning broader DEFENDED status."
+  },
+  {
+    "id": "RP-E134",
+    "name": "Distinct stale event is not exact replay",
+    "scenario": "Exact event replay is idempotent, but a distinct later event for stale authority can mutate entitlement.",
+    "expected": "Exact replay is DEFENDED only within scope; the distinct stale-authority branch is not closed by idempotency."
+  },
+  {
+    "id": "RP-E135",
+    "name": "Active replacement defense does not cover terminal replacement",
+    "scenario": "An active replacement blocks the old subscription, but the same identity control does not run when the replacement is terminal.",
+    "expected": "Do not generalize the active-state defense; inspect or classify the terminal branch separately."
+  },
+  {
+    "id": "RP-E136",
+    "name": "Unconditional identity defense across lifecycle states",
+    "scenario": "The identity and authority control rejects the prior grant across both active and terminal replacement states, with relevant later-event evidence.",
+    "expected": "DEFENDED may cover both states when the exact scope and evidence prove no invariant violation."
+  },
+  {
+    "id": "RP-E137",
+    "name": "No pointless combinatorial expansion",
+    "scenario": "A sibling branch differs in labels but does not change authority, control flow, identity binding, freshness, or entitlement outcome.",
+    "expected": "Do not require a pointless Cartesian test matrix."
+  },
+  {
+    "id": "RP-E138",
+    "name": "Unresolved sibling prevents broad defense",
+    "scenario": "One material lifecycle or identity sibling branch cannot be resolved because required runtime evidence is unavailable.",
+    "expected": "Do not mark the broader family DEFENDED; classify the unresolved branch appropriately."
+  },
+  {
+    "id": "RP-E139",
+    "name": "Coverage closure requires material branches",
+    "scenario": "A coverage summary claims an entire lifecycle or identity family is defended while one material state/identity branch was not reviewed.",
+    "expected": "Coverage Closure must fail or become PARTIAL."
+  },
+  {
+    "id": "RP-E140",
+    "name": "Active-only identity defense",
+    "scenario": "Identity mismatch is rejected only while the current authority is active; the terminal-current branch accepts a prior identity and restores value.",
+    "expected": "The active branch is DEFENDED only within scope; inspect the terminal branch, which is FINDING when the invariant violation is proven."
+  },
+  {
+    "id": "RP-E141",
+    "name": "Different prior authority defeats older-event defense",
+    "scenario": "Same-authority older events are rejected, but a different prior authority sends a newer event after replacement.",
+    "expected": "The older-event defense does not close the different-identity branch."
+  },
+  {
+    "id": "RP-E142",
+    "name": "Distinct stale event defeats exact replay defense",
+    "scenario": "Exact event replay is blocked by idempotency, but a distinct later event from stale prior authority mutates entitlement.",
+    "expected": "Exact replay is DEFENDED only within scope; the stale-authority branch remains open."
+  },
+  {
+    "id": "RP-E143",
+    "name": "Replacement-state predicate inversion",
+    "scenario": "The current replacement blocks prior authority while active but not after becoming terminal.",
+    "expected": "The predicate inversion is mandatory before assigning broader DEFENDED status."
+  },
+  {
+    "id": "RP-E144",
+    "name": "Both predicate branches preserve invariant",
+    "scenario": "Security-bearing predicate true and false branches both preserve authority, identity, lifecycle, and entitlement invariants under relevant evidence.",
+    "expected": "A broad DEFENDED result may be justified when exact scope and evidence are recorded."
+  },
+  {
+    "id": "RP-E145",
+    "name": "Non-material predicate exclusion",
+    "scenario": "A predicate changes logging or presentation but not authority, control flow, identity, freshness, entitlement, quota, or commercial value.",
+    "expected": "Do not create a finding or unnecessary Predicate Coverage obligation."
+  },
+  {
+    "id": "RP-E146",
+    "name": "Compound predicate decomposition",
+    "scenario": "A control uses A && B && C, where A and B define the mismatch scenario and C determines whether protection activates.",
+    "expected": "Challenge inversion of C rather than generating every combination."
+  },
+  {
+    "id": "RP-E147",
+    "name": "Lifecycle helper boundary",
+    "scenario": "A lifecycle helper returns true for active and grace states and false for terminal states; identity protection depends on that helper.",
+    "expected": "Analyze state boundaries where the helper changes value and review the resulting authority behavior."
+  },
+  {
+    "id": "RP-E148",
+    "name": "Superseded authority restores value",
+    "scenario": "Authority object A is validly replaced by B; B later terminates; a valid old event for A restores current entitlement.",
+    "expected": "FINDING under the Supersession Invariant when the current unauthorized value path is demonstrated."
+  },
+  {
+    "id": "RP-E149",
+    "name": "Superseded authority remains fenced",
+    "scenario": "Authority object A is replaced by B; B later terminates; events for A cannot restore value unless an explicit authoritative restoration occurs.",
+    "expected": "DEFENDED when the relevant state, identity, and later-event scope are verified."
+  },
+  {
+    "id": "RP-E150",
+    "name": "Explicit restoration is legitimate",
+    "scenario": "An explicit authoritative transition proves that prior authority A is again the valid current grant after replacement authority B ends.",
+    "expected": "Do not classify the authorized restoration itself as stale-authority bypass."
+  },
+  {
+    "id": "RP-E151",
+    "name": "Partial family defense",
+    "scenario": "A material attack family has three branches: two are DEFENDED and one is UNVERIFIED.",
+    "expected": "Do not mark the broader family completely DEFENDED; report the unresolved branch and incomplete coverage."
+  },
+  {
+    "id": "RP-E152",
+    "name": "Normal-state representative test is insufficient",
+    "scenario": "A representative test covers the normal active state, but a security-bearing predicate changes behavior in the terminal state.",
+    "expected": "Coverage Closure remains incomplete until the terminal branch is reviewed."
+  },
+  {
+    "id": "RP-E153",
+    "name": "Impossible opposite branch may be excluded",
+    "scenario": "The opposite predicate branch has demonstrably impossible or unreachable preconditions under the current contract and implementation.",
+    "expected": "Exclude it with evidence; do not force a speculative finding or pointless test matrix."
+  },
+  {
+    "id": "RP-E154",
+    "name": "Implementation-derived predicate obligation",
+    "scenario": "A security-bearing predicate creates a material branch that is absent from the attack catalog.",
+    "expected": "The implementation-derived branch is still a required review obligation."
+  },
+  {
+    "id": "RP-E155",
+    "name": "Predicate gate preserves false-positive discipline",
+    "scenario": "An opposite branch exists but no unauthorized value, state, or consumption outcome is demonstrated after controls are challenged.",
+    "expected": "Do not report FINDING merely because the branch exists; use DEFENDED, UNVERIFIED, INSUFFICIENT EVIDENCE, NOT APPLICABLE, or HARDENING ONLY as appropriate."
+  },
+  {
+    "id": "RP-E156",
+    "name": "Deterministic source proof without integration execution",
+    "scenario": "A valid or materially possible input reaches a deterministic current path, persists an unauthorized grant, and enforcement necessarily exposes the value, but integration tests cannot execute.",
+    "expected": "Assign FINDING when the invariant, path, value consequence, and controls are established; unavailable runtime reproduction alone is not a blocker."
+  },
+  {
+    "id": "RP-E157",
+    "name": "Unknown external event existence",
+    "scenario": "The application path would mishandle a state, but whether the authoritative external contract can produce that state is unknown.",
+    "expected": "Use UNVERIFIED or INSUFFICIENT EVIDENCE until the material external fact is resolved; do not admit FINDING."
+  },
+  {
+    "id": "RP-E158",
+    "name": "Authoritative contract plus deterministic mishandling",
+    "scenario": "The authoritative contract establishes that a relevant event/state is valid, the application deterministically mishandles it through entitlement enforcement, and no sandbox reproduction is available.",
+    "expected": "FINDING may be admitted without live sandbox execution when all other materially required evidence and controls satisfy the gate."
+  },
+  {
+    "id": "RP-E159",
+    "name": "Undemonstrated deployed secret reuse",
+    "scenario": "A candidate depends on a webhook or service secret being reused in the deployed environment, but repository evidence cannot establish deployment configuration.",
+    "expected": "Use UNVERIFIED because deployment state is a material missing fact."
+  },
+  {
+    "id": "RP-E160",
+    "name": "Unproven database race",
+    "scenario": "A candidate depends on a database race, but no concurrency execution or authoritative database guarantee is available and source semantics do not determine the interleaving.",
+    "expected": "Use UNVERIFIED or INSUFFICIENT EVIDENCE; do not manufacture a FINDING."
+  },
+  {
+    "id": "RP-E161",
+    "name": "Blocked test does not defeat deterministic transition",
+    "scenario": "A test cannot run, but its missing execution cannot change a deterministically established application transition and unauthorized value consequence.",
+    "expected": "Record the test limitation without downgrading a qualifying FINDING."
+  },
+  {
+    "id": "RP-E162",
+    "name": "Material missing external evidence",
+    "scenario": "A missing external fact, if resolved in the opposite direction, could show that the alleged attack sequence is impossible or authorized.",
+    "expected": "Treat the evidence as material and use UNVERIFIED or INSUFFICIENT EVIDENCE until resolved."
+  },
+  {
+    "id": "RP-E163",
+    "name": "Frequency is not existence",
+    "scenario": "The authoritative contract establishes a valid event class and the application deterministically grants unauthorized value, but live frequency of the sequence is unknown.",
+    "expected": "Do not block FINDING solely on frequency; use the missing frequency as impact or exploitability context."
+  },
+  {
+    "id": "RP-E164",
+    "name": "Defended and finding branches",
+    "scenario": "Branch A is DEFENDED and material branch B is a demonstrated FINDING.",
+    "expected": "The aggregate family must not be described as DEFENDED."
+  },
+  {
+    "id": "RP-E165",
+    "name": "Defended and unresolved branches",
+    "scenario": "Branch A is DEFENDED and material branch B is UNVERIFIED.",
+    "expected": "The family remains PARTIAL or open and cannot be broadly described as DEFENDED."
+  },
+  {
+    "id": "RP-E166",
+    "name": "All material branches defended",
+    "scenario": "Every material branch identified by Predicate Coverage is independently DEFENDED with no unresolved material evidence.",
+    "expected": "The family may be broadly marked DEFENDED when the exact scopes and controls are recorded."
+  },
+  {
+    "id": "RP-E167",
+    "name": "Coverage contradiction",
+    "scenario": "Coverage records a material branch as unresolved while findings or summary states that no path exists and the family is closed.",
+    "expected": "The Outcome Consistency Gate must fail finalization."
+  },
+  {
+    "id": "RP-E168",
+    "name": "Finding and zero-finding summary conflict",
+    "scenario": "The finding ledger contains a confirmed FINDING but the executive summary reports zero findings.",
+    "expected": "Reject finalization until the aggregate summary matches branch and finding outcomes."
+  },
+  {
+    "id": "RP-E169",
+    "name": "Material branch without outcome",
+    "scenario": "Predicate Coverage identifies a material branch, but the branch has no outcome in the review ledger.",
+    "expected": "Reject finalization; an unassigned material branch is incomplete coverage."
+  },
+  {
+    "id": "RP-E170",
+    "name": "Runtime unavailable after deterministic closure",
+    "scenario": "Runtime tests are unavailable, but all material claims are deterministically closed and no material claim depends on runtime evidence.",
+    "expected": "PASS may be reported with the runtime limitation recorded; runtime unavailability alone does not force PARTIAL."
+  },
+  {
+    "id": "RP-E171",
+    "name": "Runtime unavailable for material concurrency claim",
+    "scenario": "A material concurrency hypothesis remains unresolved because its outcome depends on scheduling and no concurrency execution or authoritative guarantee is available.",
+    "expected": "Use PARTIAL with UNVERIFIED or INSUFFICIENT EVIDENCE for that branch."
+  },
+  {
+    "id": "RP-E172",
+    "name": "Current semantics override stale test label",
+    "scenario": "An existing test name says behavior is safe, but the current implementation deterministically violates the established commercial-value invariant.",
+    "expected": "Do not let the stale test label override current semantics; admit FINDING when the evidence matrix is satisfied."
+  },
+  {
+    "id": "RP-E173",
+    "name": "Narrow test does not close broad family",
+    "scenario": "A test exercises only one narrow predicate or lifecycle branch while a broader family contains an unreviewed material branch.",
+    "expected": "Keep the broader family open and label only the tested branch as DEFENDED if warranted."
+  },
+  {
+    "id": "RP-E174",
+    "name": "Downstream enforcement compensates for weak condition",
+    "scenario": "A static condition appears weak, but downstream entitlement enforcement prevents the state from producing commercial value.",
+    "expected": "Do not admit FINDING; assign an appropriate non-finding outcome after tracing the complete path."
+  },
+  {
+    "id": "RP-E175",
+    "name": "External event without commercial consequence",
+    "scenario": "A valid external event reaches an application mutation, but the resulting state cannot create, retain, increase, restore, or consume commercial value.",
+    "expected": "Do not admit FINDING merely from event acceptance; use an appropriate non-finding outcome."
+  },
+  {
+    "id": "RP-E176",
+    "name": "Superseded prior authority restores value",
+    "scenario": "Authority object A is replaced by B; B becomes terminal; delayed valid evidence for A restores value without explicit re-authorization.",
+    "expected": "Classify A as PRIOR_SUPERSEDED and admit FINDING when the complete deterministic value path is established."
+  },
+  {
+    "id": "RP-E177",
+    "name": "Genuinely new authority after terminality",
+    "scenario": "Authority B becomes terminal and genuinely new authority C arrives through a valid new grant or replacement transition.",
+    "expected": "Evaluate C as GENUINELY_NEW and do not report a stale-authority finding merely because C differs from B."
+  },
+  {
+    "id": "RP-E178",
+    "name": "Explicit restoration of historical authority",
+    "scenario": "Authority A was superseded by B, B becomes terminal, and an explicit authoritative transition specifically re-authorizes A as current.",
+    "expected": "Do not report a finding solely because A is historical; classify the restoration as legitimate when the transition is authoritative."
+  },
+  {
+    "id": "RP-E179",
+    "name": "Unknown authority lineage",
+    "scenario": "A differing incoming identity cannot be classified as genuinely new or previously superseded, and material external history is unavailable.",
+    "expected": "Record UNKNOWN_LINEAGE and use UNVERIFIED or INSUFFICIENT EVIDENCE as appropriate; do not silently merge the cases."
+  },
+  {
+    "id": "RP-E180",
+    "name": "Repository proves prior supersession",
+    "scenario": "The durable event ledger proves the incoming identity was previously current and was superseded by the current authority.",
+    "expected": "Classify the branch as PRIOR_SUPERSEDED rather than UNKNOWN_LINEAGE and assess its stale-authority path independently."
+  },
+  {
+    "id": "RP-E181",
+    "name": "Repository proves genuinely new identity",
+    "scenario": "The incoming identity has never appeared in authority history and an explicit new-authority creation transition is established.",
+    "expected": "Classify the branch as GENUINELY_NEW and evaluate its independent grant authority."
+  },
+  {
+    "id": "RP-E182",
+    "name": "Terminal predicate inversion with prior lineage",
+    "scenario": "Current terminality disables an identity guard and a known prior-superseded authority is then accepted.",
+    "expected": "Predicate Coverage and Authority Lineage must produce FINDING when the accepted path restores commercial value."
+  },
+  {
+    "id": "RP-E183",
+    "name": "Terminal predicate inversion with new lineage",
+    "scenario": "Current terminality disables the same guard and a genuinely new authority is accepted under explicit new-grant semantics.",
+    "expected": "Treat the transition as legitimate or DEFENDED when its authority and value boundaries are established."
+  },
+  {
+    "id": "RP-E184",
+    "name": "Lineage classes require separate ledger rows",
+    "scenario": "One branch ledger row says an incoming differing identity is either new or prior, although those classes have different authorization semantics.",
+    "expected": "Split the row into independent lineage classes before assigning outcomes or closing coverage."
+  },
+  {
+    "id": "RP-E185",
+    "name": "Lineage observability creates stale acceptance",
+    "scenario": "The system retains no supersession history, accepts any differing identity after the current object is terminal, and valid prior evidence deterministically restores value.",
+    "expected": "Treat lost lineage observability as the mechanism of FINDING when the Finding Admission Gate is satisfied."
+  },
+  {
+    "id": "RP-E186",
+    "name": "Missing history harmless under authority guarantee",
+    "scenario": "The application retains no prior-object history, but the authoritative contract guarantees old identities can never emit valid evidence again.",
+    "expected": "Do not report a stale-authority finding from missing history alone."
+  },
+  {
+    "id": "RP-E187",
+    "name": "Exact prior replay defense is narrow",
+    "scenario": "Durable idempotency blocks an exact duplicate event for prior authority A.",
+    "expected": "Mark exact replay DEFENDED only; do not close a distinct-event prior-authority branch."
+  },
+  {
+    "id": "RP-E188",
+    "name": "Distinct later prior event",
+    "scenario": "Prior authority A sends a distinct later valid event after replacement authority B becomes terminal.",
+    "expected": "Do not reuse exact-replay defense; classify the distinct prior-authority branch independently."
+  },
+  {
+    "id": "RP-E189",
+    "name": "Authoritative reconciliation restoration",
+    "scenario": "Prior authority A was superseded, but authoritative reconciliation explicitly proves A is again current.",
+    "expected": "Treat the restoration as legitimate when the contract and transition authorize it; do not classify historical identity alone as a bypass."
+  },
+  {
+    "id": "RP-E190",
+    "name": "Source-provable lineage branch without runtime test",
+    "scenario": "Repository history proves a prior-superseded identity and current semantics deterministically permit its value restoration, but runtime tests are unavailable.",
+    "expected": "Apply Deterministic Source Proof; runtime unavailability alone does not downgrade a qualifying FINDING."
+  },
+  {
+    "id": "RP-E191",
+    "name": "Independent lineage outcomes",
+    "scenario": "The genuinely-new branch is UNVERIFIED because an external contract is unavailable, while the prior-superseded branch is source-proven FINDING.",
+    "expected": "Keep both outcomes in the family ledger; do not merge them into one UNVERIFIED or broad family label."
+  },
+  {
+    "id": "RP-E192",
+    "name": "Confirmed target value is required",
+    "scenario": "A candidate is marked confirmed while target_value is unknown.",
+    "expected": "Reject finalization; a confirmed finding must carry a meaningful target value."
+  },
+  {
+    "id": "RP-E193",
+    "name": "Confirmed invariant is required",
+    "scenario": "A candidate is marked confirmed while invariant is unknown.",
+    "expected": "Reject finalization; a confirmed finding must carry a meaningful invariant."
+  },
+  {
+    "id": "RP-E194",
+    "name": "Empty finding semantics are invalid",
+    "scenario": "A confirmed judgment contains empty or null required finding semantics.",
+    "expected": "Reject the judgment and finalization."
+  },
+  {
+    "id": "RP-E195",
+    "name": "Intermediate checkout state is not realized value",
+    "scenario": "A timeout permits a second checkout object, but no second payment, authority, entitlement, quota, or consumption is established.",
+    "expected": "Do not confirm; retain a non-confirmed outcome appropriate to the unresolved value path."
+  },
+  {
+    "id": "RP-E196",
+    "name": "Deterministic duplicate value path can confirm",
+    "scenario": "A timeout deterministically reaches a second paid entitlement downstream and all other finding gates are satisfied.",
+    "expected": "FINDING may be confirmed without unnecessary dynamic reproduction."
+  },
+  {
+    "id": "RP-E197",
+    "name": "Ambiguous product policy blocks dependent finding",
+    "scenario": "Confirmation requires choosing between materially different product interpretations and the policy remains ambiguous.",
+    "expected": "Do not confirm; use a non-confirmed outcome."
+  },
+  {
+    "id": "RP-E198",
+    "name": "Policy-independent invariant survives ambiguity",
+    "scenario": "Product policy is ambiguous, but a separate authority or binding violation deterministically grants one account's paid value to another.",
+    "expected": "FINDING may be confirmed when the policy-independent evidence matrix is complete."
+  },
+  {
+    "id": "RP-E199",
+    "name": "Material provider conflict blocks dependency",
+    "scenario": "Two authoritative provider sources materially conflict on a fact required to decide the candidate.",
+    "expected": "Preserve CONFLICTED status and block confirmation that depends on the disputed fact."
+  },
+  {
+    "id": "RP-E200",
+    "name": "Irrelevant provider conflict does not block independent finding",
+    "scenario": "Authoritative provider sources differ on a fact unrelated to an otherwise source-proven authority/value violation.",
+    "expected": "Do not block the independent finding; do not treat the irrelevant conflict as material."
+  },
+  {
+    "id": "RP-E201",
+    "name": "Suspicious intermediate state remains non-confirmed",
+    "scenario": "A suspicious mutation is established, but no entitlement, consumption, quota, or other commercial-value consequence follows.",
+    "expected": "Do not admit FINDING merely from the intermediate state."
+  },
+  {
+    "id": "RP-E202",
+    "name": "Complete mismatch to paid capability path",
+    "scenario": "An authority mismatch deterministically causes an entitlement mutation and exposes an actual paid capability.",
+    "expected": "FINDING may be confirmed when invariant, authority, controls, and evidence are established."
+  },
+  {
+    "id": "RP-E203",
+    "name": "P1 requires material realized value",
+    "scenario": "P1 is assigned to a candidate with only suspicious payment code and no demonstrated unauthorized commercial result.",
+    "expected": "Reject confirmation or severity; P1 cannot substitute for realized-value evidence."
+  },
+  {
+    "id": "RP-E204",
+    "name": "Non-confirmed severity is invalid",
+    "scenario": "A NEEDS_REVIEW, REJECTED, or DUPLICATE candidate carries final finding severity.",
+    "expected": "Reject or normalize the state according to the deterministic gate; no public finding severity is emitted."
+  },
+  {
+    "id": "RP-E205",
+    "name": "Renderer rejects placeholder finding",
+    "scenario": "Rendering is requested for a confirmed candidate whose required public field is a placeholder.",
+    "expected": "Mechanical validation fails before a public finding is emitted."
+  },
+  {
+    "id": "RP-E206",
+    "name": "Findings projection is canonical and unique",
+    "scenario": "Finalization has confirmed, rejected, duplicate, and needs-review candidates.",
+    "expected": "findings.md contains every canonical confirmed finding exactly once and no non-confirmed candidate."
+  },
+  {
+    "id": "RP-E207",
+    "name": "Manual authority remains legitimate",
+    "scenario": "An established administrative or manual grant intentionally provides paid value without a payment transaction.",
+    "expected": "Do not report a payment bypass without proving the actor is outside intended grant authority."
+  },
+  {
+    "id": "RP-E208",
+    "name": "Provider absence is not value evidence",
+    "scenario": "No provider is connected and a legitimate non-provider grant model is documented.",
+    "expected": "Preserve provider-not-connected handling and do not infer a vulnerability from provider absence alone."
+  },
+  {
+    "id": "RP-E209",
+    "name": "Generation protections survive precision gates",
+    "scenario": "A review completes discovery, freeze, judgment, finalization, then reopens discovery and creates a new generation.",
+    "expected": "Preserve archived evidence, require fresh judgments, and keep stale generation artifacts unusable."
+  },
+  {
+    "id": "RP-E210",
+    "name": "Final semantics are tamper checked",
+    "scenario": "A finalized structured finding or derived report is changed after finalization.",
+    "expected": "Regeneration detects the mismatch and rejects the tampered final state or report."
+  }
+]

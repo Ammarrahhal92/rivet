@@ -1,0 +1,86 @@
+[
+  {
+    "id": "RPR-001",
+    "name": "Intended administrative grant",
+    "provider": "MockPay",
+    "fixture_path": "evals/fixtures/intended-admin-grant",
+    "prompt": "$rivet-pay Review this repository.",
+    "expected_verdict": "PASS",
+    "expected_confirmed_finding_count": 0,
+    "required_concepts": ["ADMINISTRATIVE GRANT", "authority contract"],
+    "forbidden_false_positives": ["payment bypass from permission names"],
+    "complete_coverage_expected": true
+  },
+  {
+    "id": "RPR-002",
+    "name": "Ambiguous product policy for external state",
+    "provider": "MockPay",
+    "fixture_path": "evals/fixtures/ambiguous-provider-policy",
+    "prompt": "$rivet-pay Review this repository.",
+    "expected_verdict": "PARTIAL",
+    "expected_confirmed_finding_count": 0,
+    "required_concepts": ["AMBIGUOUS", "provider contract", "product policy"],
+    "forbidden_false_positives": ["provider fact automatically establishes local revocation policy"],
+    "complete_coverage_expected": false
+  },
+  {
+    "id": "RPR-003",
+    "name": "Refund restoration",
+    "provider": "MockPay",
+    "fixture_path": "evals/fixtures/refund-restoration",
+    "prompt": "$rivet-pay Review this repository.",
+    "expected_verdict": "FINDINGS CONFIRMED",
+    "expected_confirmed_finding_count": 1,
+    "required_concepts": ["deterministic source proof", "revocation", "restoration"],
+    "forbidden_false_positives": [],
+    "complete_coverage_expected": true
+  },
+  {
+    "id": "RPR-004",
+    "name": "Prior superseded authority return",
+    "provider": "MockPay",
+    "fixture_path": "evals/fixtures/prior-superseded-return",
+    "prompt": "$rivet-pay Review this repository.",
+    "expected_verdict": "FINDINGS CONFIRMED",
+    "expected_confirmed_finding_count": 1,
+    "required_concepts": ["PRIOR / SUPERSEDED", "terminality", "lineage"],
+    "forbidden_false_positives": ["genuinely new authority merged with prior authority"],
+    "complete_coverage_expected": true
+  },
+  {
+    "id": "RPR-005",
+    "name": "Genuinely new replacement",
+    "provider": "MockPay",
+    "fixture_path": "evals/fixtures/genuine-new-replacement",
+    "prompt": "$rivet-pay Review this repository.",
+    "expected_verdict": "PASS",
+    "expected_confirmed_finding_count": 0,
+    "required_concepts": ["GENUINELY NEW / NEVER-CURRENT", "rebind authorization"],
+    "forbidden_false_positives": ["stale-authority finding for legitimate new authority"],
+    "complete_coverage_expected": true
+  },
+  {
+    "id": "RPR-006",
+    "name": "Wrong-authority revocation",
+    "provider": "MockPay",
+    "fixture_path": "evals/fixtures/old-authority-revocation",
+    "prompt": "$rivet-pay Review this repository.",
+    "expected_verdict": "FINDINGS CONFIRMED",
+    "expected_confirmed_finding_count": 1,
+    "required_concepts": ["binding invariant", "wrong authority", "revocation"],
+    "forbidden_false_positives": [],
+    "complete_coverage_expected": true
+  },
+  {
+    "id": "RPR-007",
+    "name": "External runtime fact required",
+    "provider": "MockPay",
+    "fixture_path": "evals/fixtures/external-runtime-required",
+    "prompt": "$rivet-pay Review this repository.",
+    "expected_verdict": "PARTIAL",
+    "expected_confirmed_finding_count": 0,
+    "required_concepts": ["UNVERIFIED", "deployment fact", "runtime evidence"],
+    "forbidden_false_positives": ["source-only proof of an unestablished deployment condition"],
+    "complete_coverage_expected": false
+  }
+]
